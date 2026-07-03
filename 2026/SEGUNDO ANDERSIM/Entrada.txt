@@ -1,0 +1,32 @@
+Comprimento (m):
+12
+Diâmetro (m):
+1
+Inclinação (rad):
+-1.57
+Número de segmentos:
+300
+Tempo de simulação (s):
+0.2
+Velocidade de entrada de líquido (m/s):
+10.0
+Velocidade de entrada de gás (m/s):
+0.00
+Densidade do líquido (kg/m³):
+1000
+Densidade do gás (kg/m³):
+1.16
+Pressão na saída do domínio (Pa):
+1e5
+Fração de gás na entrada:
+0.2
+Fração de gás inicial no duto:
+0.2
+CFL (baseado nas velocidades de entrada):
+0.4
+Tolerância para a pressão:
+1e-3
+Tolerância para as velocidades:
+1e-3
+Tolerância para as frações:
+1e-3
