@@ -1,7 +1,7 @@
 # Ici on définit le type box, servant a l'indexation des maillages
 
 
-@kwdef struct box 
+mutable struct box 
     # Position du maillage dans le maillage parent
     lbnd::Int8
     ubnd::Int8
@@ -13,4 +13,5 @@
     # Définition des bords du maillages, true pour un bord physique, false pour une interface entre les maillages
     bbox::Vector{Bool}
 end
+
 
