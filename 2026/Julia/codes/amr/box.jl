@@ -2,7 +2,7 @@
 
 
 mutable struct box 
-    # Position du maillage dans le maillage parent
+    # Position of the grid inside the grid parent
     lbnd::Int64
     ubnd::Int64
 
@@ -10,7 +10,7 @@ mutable struct box
     N_points::Int64
     N_gzones::Int64
 
-    # Définition des bords du maillages, true pour un bord physique, false pour une interface entre les maillages
+    # Definition of the boundary condition of the mesh: true for a physical boundary and false for un grid interface boundary
     bbox::Vector{Bool}
 end
 
