@@ -3,6 +3,8 @@ function bound_cond(t::Float64)
     return t
 end
 function init_cond(x::Float64)
-    return x + 1.0
+
+    return 1000.0 * exp( - 1000 * (x - 0.5)^2 )
+    
 end
 

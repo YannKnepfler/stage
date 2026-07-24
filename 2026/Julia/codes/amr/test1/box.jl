@@ -1,7 +1,7 @@
 # Ici on définit le type box, servant a l'indexation des maillages
 
 
-mutable struct box 
+mutable struct Box 
     # Position of the grid inside the grid parent
     lbnd::Int64
     ubnd::Int64
@@ -13,6 +13,4 @@ mutable struct box
     # Definition of the boundary condition of the mesh: true for a physical boundary and false for un grid interface boundary
     bbox::Vector{Bool}
 end
-
-
 
