@@ -131,7 +131,7 @@ function compute_mean_grad(u::Vector{Float64})
     end
 
     gu_p = 2 * gu_p / N_points
-    
+
     return gu_m, gu_p
 end
     
@@ -186,7 +186,7 @@ function refine_grid(parent::Grid, tol::Float64, N_point_base::Int64)
     return children 
 end
 
-# Function that return the boundaries beetween wich to refine 
+# Function that return the boundaries between wich to refine 
 function refine_bnd(u::Vector{Float64}, index::UnitRange{Int64}, tol::Float64)
 
     # Definition of the local variables
@@ -216,4 +216,159 @@ function refine_bnd(u::Vector{Float64}, index::UnitRange{Int64}, tol::Float64)
     end
     
     return lbnd, ubnd
+end
+
+function prolongate_children!(parent::Grid, new_children::Vector{Grid})
+
+    # Declaration of the local varaibles
+    parent_ind::Int64 = 0
+    slope::Float64 = 0.0
+
+
+    # Loop on the new children 
+    for new_child in new_children 
+        parent_ind = new_child.box.lbnd
+
+        # Loop on the inside control volumes 
+        while parent_ind <= new_child.box.ubnd
+            # Identifying the first cell index 
+            new_ind = new_child.box.inside_ind[ (parent_ind - new_child.box.lbnd) * 2 + 1 ]
+
+            # Check in wich child grid the cell is refined 
+            old_child::Union{Grid, Nothing} = is_refined(parent, parent_ind)
+
+            if isnothing(old_child) # The parent control volume was not refined
+
+                # Compute the slope 
+                slope = compute_slope(parent, parent_ind)
+
+                # Prolongate the new child
+                new_child.u[new_ind]     = parent.u[parent_ind] + 0.25 * slope
+                new_child.u[new_ind + 1] = parent.u[parent_ind] - 0.25 * slope
+
+                # Update the parent index 
+                parent_ind += 1
+
+            else # The parent controle volume was refined
+
+                # Compute the gap between the two grid
+                ove_start::Int64 = max(old_child.box.lbnd, new_child.box.lbnd) # Starting index where the two child grid are overlapping on the parent grid 
+                gap::Int64 = old_child.box.inside_ind[ 2 * (ove_start - old_child.box.lbnd) + 1] - new_child.box.inside_ind[ 2 * (ove_start - new_child.box.lbnd) + 1]  
+
+                # Transfer the overlapping child grid of the old grid to the new one
+                new_child_children::Union{Vector{Grid}, Nothing} = child_transfer!(new_child, old_child, gap)
+
+                if !isnothing(new_child_children)
+                    append!(new_child.children, new_child_children)
+                end
+                
+                # Prolongate the child
+                for old_ind in old_child.box.inside_ind
+                    if old_ind - gap in new_child.box.inside_ind
+                        new_child.u[old_ind - gap] = old_child.u[old_ind]
+                    end
+                end
+
+                # Update the parent index 
+                parent_ind = min(old_child.box.ubnd, new_child.box.ubnd) + 1
+
+            end
+
+
+        end
+
+
+    end
+end
+
+# Function that return the child in wich the control volume at index ind is refine or nothing if the controle is not refined 
+function is_refined(grid::Grid, ind::Int64)
+
+    result::Union{Grid, Nothing} = nothing 
+
+    # Check in which child grid the refined controle volume is contained 
+    for child in grid.children
+        if child.box.lbnd <= ind <= child.box.ubnd 
+            result = child
+        end
+    end
+
+    return result
+end
+
+function compute_slope(grid::Grid, ind::Int64)
+
+    # Declaration of the local variables 
+    slope::Float64 = 0.0
+
+    # Check for border index 
+    if ind == grid.box.inside_ind[1]
+        slope = grid.u[ind + 1] - grid.u[ind]
+
+    elseif ind == grid.box.inside_ind[end]
+        slope = grid.u[ind] - grid.u[ind - 1]
+
+    else
+        slope_l::Float64 = grid.u[ind] - grid.u[ind - 1]
+        slope_r::Float64 = grid.u[ind + 1] - grid.u[ind]
+
+        # Apply minmod slope limiter 
+        if slope_l * slope_r > 0.0
+            if abs(slope_l) < abs(slope_r)
+                slope = slope_l
+
+            else
+                slope = slope_r
+
+            end
+        end
+    end
+
+    return slope
+end
+
+function child_transfer!(new_grid::Grid, old_grid::Grid, gap::Int64)
+
+    # Check if the two grid are overlapping 
+
+    if max(old_grid.box.lbnd, new_grid.box.lbnd) <= min(old_grid.box.ubnd, new_grid.box.ubnd)
+
+        # Identifying the overlapping range of the old grid on the new grid 
+
+        parent_range::UnitRange{Int64} = max(old_grid.box.lbnd, new_grid.box.lbnd) : min(old_grid.box.ubnd, new_grid.box.ubnd)
+
+        old_range::UnitRange{Int64} = old_grid.box.inside_ind[ 
+            2 * (parent_range[1] - old_grid.box.lbnd) + 1 : 2 * (parent_range[end] - old_grid.box.lbnd) + 2 
+        ]
+
+        # Identifying the list of child of the old grid overlapping on the new grid 
+        new_children::Vector{Grid} = []
+
+        for old_child in old_grid.children
+
+            # Check if one of the boun is in the overlapping area 
+            if (old_child.box.lbnd in old_range) || (old_child.box.ubnd in old_range)
+                
+                # Updating the boundaries of the old_child
+                new_lbnd = old_child.box.lbnd - gap
+                new_ubnd = old_child.box.ubnd - gap
+
+                old_child.box.lbnd = new_lbnd
+                old_child.box.ubnd = new_ubnd
+
+                # Update of the parent grid 
+                old_child.parent = new_grid
+
+                # Update the child list
+                push!(new_children, old_child)
+
+            end
+        end
+        
+        return new_children
+
+    else # The two grid are not overlapping
+        return nothing
+    end
+
 end

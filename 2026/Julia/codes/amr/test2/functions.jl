@@ -4,7 +4,7 @@ function bound_cond(t::Float64)
 end
 function init_cond(x::Float64)
 
-    return 1000.0 * exp( - 1000 * (x - 0.5)^2 )
-    
+    return exp(-1000.0 * (x - 0.5)^2)
+
 end
 
