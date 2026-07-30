@@ -92,7 +92,7 @@ end
 
 # Function that initialize a level 
 function initialize_level(level::Level, eta::Float64, N_points_base::Int64)
-
+    println("depth = ", level.depth)
     # Defintion of the local variables 
     child_level::Union{Level, Nothing} = nothing
     N::Int64 = 0
@@ -106,14 +106,17 @@ function initialize_level(level::Level, eta::Float64, N_points_base::Int64)
         # Compute eta
         u::Vector{Float64} = grid.u[grid.box.without_bz]
 
+        println("compute tol")
         gu_m, gu_p = compute_mean_grad(u)
-
+        
         eta += gu_m + gu_p 
     end
 
 
     # Compute the tolerance 
     tol = sqrt(eta / (2 * N))
+
+    println("tol = ", tol)
 
     if level.depth == 1
         tol = 0.25 * tol
@@ -150,6 +153,7 @@ function adapt!(base::Level, max_depth::Int64)
     # Loop on the child level 
     while !isnothing(level) && (level.depth < max_depth)
 
+        # println("depth = ", level.depth)
         adapt_level!(level, eta, base.grid_list[1].N_points)
 
         
@@ -161,6 +165,8 @@ end
 # Function that adpat a level 
 function adapt_level!(level::Level, eta::Float64, N_points_base::Int64)
     
+
+    println("depth = ", level.depth)
     # Defintion of the local variables 
     N::Int64 = 0
     tol::Float64 = 0.0
@@ -173,18 +179,24 @@ function adapt_level!(level::Level, eta::Float64, N_points_base::Int64)
         # Compute eta
         u::Vector{Float64} = grid.u[grid.box.without_bz]
 
+        println("compute tol")
         gu_m, gu_p = compute_mean_grad(u)
 
         eta += gu_m + gu_p 
+        
     end
 
 
     # Compute the tolerance 
     tol = sqrt(eta / (2 * N))
 
-        if level.depth == 1
+    if level.depth == 1
         tol = 0.25 * tol
     end
+
+
+    println("tol = ", tol)
+
 
     # Clear the old children list of the child grid 
     if !isnothing(level.child)
@@ -215,15 +227,20 @@ function adapt_level!(level::Level, eta::Float64, N_points_base::Int64)
 
             end
 
-            append!(level.child.grid_list, new_children)
-
-
-
-
-            
+            append!(level.child.grid_list, new_children)           
 
         end
+
+
     end
+
+    # Delete the child level if it has an empty grid list 
+    if !isnothing(level.child)
+        if length(level.child.grid_list) == 0 
+            level.child = nothing
+        end
+    end
+
 
 end
 

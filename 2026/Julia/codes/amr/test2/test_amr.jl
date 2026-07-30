@@ -47,20 +47,23 @@ dt::Float64 = dx
 
 base_level::Union{Level, Nothing} = Level(N_points, N_gzones, x0, dt, dx)
 
-initialize!(base_level, 5)
+initialize!(base_level, 6)
 
-test(base_level)
+# test(base_level)
 
-move!(base_level, 0.05)
+move!(base_level, -0.2)
 
-adapt!(base_level, 5)
+
 
 println("")
 println("======================== MOVED ========================")
 println("")
+
+adapt!(base_level, 6)
 # test(base_level)
 
-println( length(base_level.child.child.child.child.grid_list), " ", base_level.child.child.child.child.depth )
+
+
 
 
 
@@ -101,5 +104,5 @@ plot!(
 )
 
 
-savefig(fig, "../image/criteria1/test1/test_mv_5.png")
+savefig(fig, "../image/criteria1/test1/mv2/test_mv_6.png")
 

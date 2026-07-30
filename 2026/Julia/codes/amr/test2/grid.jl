@@ -131,7 +131,7 @@ function compute_mean_grad(u::Vector{Float64})
     end
 
     gu_p = 2 * gu_p / N_points
-
+    println("gu_m = ", gu_m, ", gu_p = ", gu_p)
     return gu_m, gu_p
 end
     
@@ -229,6 +229,7 @@ function prolongate_children!(parent::Grid, new_children::Vector{Grid})
     for new_child in new_children 
         parent_ind = new_child.box.lbnd
 
+
         # Loop on the inside control volumes 
         while parent_ind <= new_child.box.ubnd
             # Identifying the first cell index 
@@ -243,8 +244,8 @@ function prolongate_children!(parent::Grid, new_children::Vector{Grid})
                 slope = compute_slope(parent, parent_ind)
 
                 # Prolongate the new child
-                new_child.u[new_ind]     = parent.u[parent_ind] + 0.25 * slope
-                new_child.u[new_ind + 1] = parent.u[parent_ind] - 0.25 * slope
+                new_child.u[new_ind]     = parent.u[parent_ind] - 0.25 * slope
+                new_child.u[new_ind + 1] = parent.u[parent_ind] + 0.25 * slope
 
                 # Update the parent index 
                 parent_ind += 1
@@ -272,6 +273,18 @@ function prolongate_children!(parent::Grid, new_children::Vector{Grid})
                 # Update the parent index 
                 parent_ind = min(old_child.box.ubnd, new_child.box.ubnd) + 1
 
+            end
+
+            # Loop on the ghost zones
+
+            # Left ghost zones
+            parent_ind = grid.box.lbnd - div(grid.N_gzones + 1, 2 )
+
+            # Check for odd number of ghost zones
+            if grid.N_gzones % 2 == 1 
+                
+                
+                
             end
 
 
