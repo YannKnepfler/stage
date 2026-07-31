@@ -106,3 +106,4 @@ plot!(
 
 savefig(fig, "../image/criteria1/test1/mv2/test_mv_6.png")
 
+

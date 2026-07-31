@@ -1,5 +1,9 @@
 
-function bound_cond(t::Float64)
+function left_bound_cond(t::Float64)
+    return t
+end
+
+function right_bound_cond(t::Float64)
     return t
 end
 function init_cond(x::Float64)
