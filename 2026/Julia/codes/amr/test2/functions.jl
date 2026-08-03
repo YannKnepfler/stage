@@ -8,7 +8,7 @@ function right_bound_cond(t::Float64)
 end
 function init_cond(x::Float64)
 
-    return exp(-1000.0 * (x - 0.5)^2)
+    return exp(-1000.0 * (x - 0.25)^2)
 
 end
 

@@ -106,7 +106,7 @@ function initialize_level(level::Level, eta::Float64, N_points_base::Int64)
         # Compute eta
         u::Vector{Float64} = grid.u[grid.box.without_bz]
 
-        println("compute tol")
+        # println("compute tol")
         gu_m, gu_p = compute_mean_grad(u)
         
         eta += gu_m + gu_p 
@@ -116,10 +116,10 @@ function initialize_level(level::Level, eta::Float64, N_points_base::Int64)
     # Compute the tolerance 
     tol = sqrt(eta / (2 * N))
 
-    println("tol = ", tol)
+    # println("tol = ", tol)
 
     if level.depth == 1
-        tol = 0.25 * tol
+        tol = 1.0 * tol
     end
 
 
@@ -179,7 +179,7 @@ function adapt_level!(level::Level, eta::Float64, N_points_base::Int64)
         # Compute eta
         u::Vector{Float64} = grid.u[grid.box.without_bz]
 
-        println("compute tol")
+        # println("compute tol")
         gu_m, gu_p = compute_mean_grad(u)
 
         eta += gu_m + gu_p 
@@ -191,11 +191,11 @@ function adapt_level!(level::Level, eta::Float64, N_points_base::Int64)
     tol = sqrt(eta / (2 * N))
 
     if level.depth == 1
-        tol = 0.25 * tol
+        tol = 1.0 * tol
     end
 
 
-    println("tol = ", tol)
+    # println("tol = ", tol)
 
 
     # Clear the old children list of the child grid 

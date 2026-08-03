@@ -35,7 +35,7 @@ function move!(level::Union{Level, Nothing}, gap::Float64)
 end
 
 
-N_points::Int64 = 16
+N_points::Int64 = 32
 N_gzones::Int64 = 0
 
 x0::Float64 = 0.0
@@ -51,16 +51,16 @@ initialize!(base_level, 6)
 
 # test(base_level)
 
-move!(base_level, -0.2)
+# move!(base_level, -0.2)
 
 
 
-println("")
-println("======================== MOVED ========================")
-println("")
+# println("")
+# println("======================== MOVED ========================")
+# println("")
 
-adapt!(base_level, 6)
-# test(base_level)
+# adapt!(base_level, 6)
+# # test(base_level)
 
 
 
@@ -84,7 +84,7 @@ fig = plot(
     seriestype = :line,
     marker = :xcross,
     label = nothing,
-    title = "test",
+    title = "Basr number of cell: " * string(N_points),
     linecolor = :orange,
     markercolor = :orange,
     x_lims = [0, 1],
@@ -104,6 +104,6 @@ plot!(
 )
 
 
-savefig(fig, "../image/criteria1/test1/mv2/test_mv_6.png")
+savefig(fig, "../image/criteria1/test2/coef1.0/test_crit1_" * string(N_points) * ".png")
 
 

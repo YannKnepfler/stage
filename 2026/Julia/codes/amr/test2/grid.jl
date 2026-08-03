@@ -131,7 +131,7 @@ function compute_mean_grad(u::Vector{Float64})
     end
 
     gu_p = 2 * gu_p / N_points
-    println("gu_m = ", gu_m, ", gu_p = ", gu_p)
+    # println("gu_m = ", gu_m, ", gu_p = ", gu_p)
     return gu_m, gu_p
 end
     
@@ -279,70 +279,70 @@ function prolongate_children!(parent::Grid, new_children::Vector{Grid})
 
             # Loop on the ghost zones
 
-            # Left ghost zones
+            # # Left ghost zones
 
-            # Check if the boundary is physical or if it is a grid interaces
-            if new_child.box.bbox[1] # Physical boundary 
+            # # Check if the boundary is physical or if it is a grid interaces
+            # if new_child.box.bbox[1] # Physical boundary 
                 
-                # Prolongate the left ghost zone
-                for ind in new_child.box.lgzone_ind
-                    new_child.u[ind] = left_bound_cond(0.0)
-                end
-            else # Grid interface
+            #     # Prolongate the left ghost zone
+            #     for ind in new_child.box.lgzone_ind
+            #         new_child.u[ind] = left_bound_cond(0.0)
+            #     end
+            # else # Grid interface
 
-                i_start = grid.box.lbnd - div(grid.N_gzones + 1, 2 )
-                i_end = grid.box.lbnd - 1
+            #     i_start = grid.box.lbnd - div(grid.N_gzones + 1, 2 )
+            #     i_end = grid.box.lbnd - 1
 
-                # Check for odd number of ghost zones
-                if grid.N_gzones % 2 == 1 
+            #     # Check for odd number of ghost zones
+            #     if grid.N_gzones % 2 == 1 
                     
-                    # check in which grid the control volume was refined 
-                    old_child = is_refined(parent, i_start)
+            #         # check in which grid the control volume was refined 
+            #         old_child = is_refined(parent, i_start)
 
-                    if isnothing(old_child) # The parent control volume was not refined 
+            #         if isnothing(old_child) # The parent control volume was not refined 
 
-                        # Compute slope
-                        slope = compute_slope(parent, i_start)
+            #             # Compute slope
+            #             slope = compute_slope(parent, i_start)
                         
-                        # Prolongate the ghost zone 
-                        new_child.u[1] =  parent.u[i_start] + 0.25 * slope
+            #             # Prolongate the ghost zone 
+            #             new_child.u[1] =  parent.u[i_start] + 0.25 * slope
 
-                    else # The parent control volume was refined
+            #         else # The parent control volume was refined
                         
-                        # Compute the gap between the two grid
-                        ove_start::Int64 = max(old_child.box.lbnd, new_child.box.lbnd) # Starting index where the two child grid are overlapping on the parent grid 
-                        gap::Int64 = old_child.box.inside_ind[ 2 * (ove_start - old_child.box.lbnd) + 1] - new_child.box.inside_ind[ 2 * (ove_start - new_child.box.lbnd) + 1]
+            #             # Compute the gap between the two grid
+            #             ove_start::Int64 = max(old_child.box.lbnd, new_child.box.lbnd) # Starting index where the two child grid are overlapping on the parent grid 
+            #             gap::Int64 = old_child.box.inside_ind[ 2 * (ove_start - old_child.box.lbnd) + 1] - new_child.box.inside_ind[ 2 * (ove_start - new_child.box.lbnd) + 1]
 
-                        # Prolongate the ghost zone 
-                        new_child.u[1] = old_child.u[1 + gap]
+            #             # Prolongate the ghost zone 
+            #             new_child.u[1] = old_child.u[1 + gap]
 
-                    end
+            #         end
 
-                    # Update the parent_index
-                    i_start += 1
-                end
+            #         # Update the parent_index
+            #         i_start += 1
+            #     end
 
-                # Rest of the ghost zones
-                for i in i_start : i_end
+            #     # Rest of the ghost zones
+            #     for i in i_start : i_end
 
-                    # Identifying the first control volume index 
-                    new_ind = new_child.box.lgzone_ind[ end + 1 - (new_child.box.lbnd - parent_ind) * 2  ]
+            #         # Identifying the first control volume index 
+            #         new_ind = new_child.box.lgzone_ind[ end + 1 - (new_child.box.lbnd - parent_ind) * 2  ]
 
-                    # Check in wich grid the control volume was refined 
-                    old_child= is_refined(parent, parent_ind)
+            #         # Check in wich grid the control volume was refined 
+            #         old_child= is_refined(parent, parent_ind)
 
-                    if isnothing(old_child) # The parent control volume was refined
+            #         if isnothing(old_child) # The parent control volume was refined
 
-                    else # The parent control volume was refined 
+            #         else # The parent control volume was refined 
 
                         
-                    end
+            #         end
 
-                end
+            #     end
 
 
 
-            end
+            # end
 
 
  
