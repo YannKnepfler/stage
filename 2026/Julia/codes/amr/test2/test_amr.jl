@@ -35,8 +35,8 @@ function move!(level::Union{Level, Nothing}, gap::Float64)
 end
 
 
-N_points::Int64 = 32
-N_gzones::Int64 = 0
+N_points::Int64 = 16
+N_gzones::Int64 = 2
 
 x0::Float64 = 0.0
 l::Float64 = 1.0
@@ -47,31 +47,37 @@ dt::Float64 = dx
 
 base_level::Union{Level, Nothing} = Level(N_points, N_gzones, x0, dt, dx)
 
-initialize!(base_level, 6)
+initialize!(base_level, 8)
 
-# test(base_level)
+test(base_level)
 
-# move!(base_level, -0.2)
+println("")
+println("======================== MOVED 1 ========================")
+println("")
+
+move!(base_level, 0.01 / 2.0)
+
+adapt!(base_level, 8)
+test(base_level)
+
+println("")
+println("======================== MOVED 2 ========================")
+println("")
+
+move!(base_level, 0.01 / 2.0)
+
+adapt!(base_level, 8)
+test(base_level)
 
 
 
-# println("")
-# println("======================== MOVED ========================")
-# println("")
-
-# adapt!(base_level, 6)
-# # test(base_level)
 
 
+# depth_list::Vector{Int64} = []
+# position_list::Vector{Float64} = []
+# solution_list::Vector{Float64} = []
 
-
-
-
-depth_list::Vector{Int64} = []
-position_list::Vector{Float64} = []
-solution_list::Vector{Float64} = []
-
-output!(base_level.grid_list[1], 1, depth_list, position_list, solution_list)
+# output!(base_level.grid_list[1], 1, depth_list, position_list, solution_list)
 
 
 # ind = 0.0:0.001:1.0
@@ -79,31 +85,30 @@ output!(base_level.grid_list[1], 1, depth_list, position_list, solution_list)
 # exp_sol = [init_cond(x - 0.25) for x in ind]
 
 
-fig = plot( 
-    position_list, solution_list,
-    seriestype = :line,
-    marker = :xcross,
-    label = nothing,
-    title = "Basr number of cell: " * string(N_points),
-    linecolor = :orange,
-    markercolor = :orange,
-    x_lims = [0, 1],
-    y_lims = [0, 1],
-    legend = :topright
-)
+# fig = plot( 
+#     position_list, solution_list,
+#     seriestype = :line,
+#     marker = :xcross,
+#     label = nothing,
+#     title = "Basr number of cell: " * string(N_points),
+#     linecolor = :orange,
+#     markercolor = :orange,
+#     x_lims = [0, 1],
+#     y_lims = [0, 1],
+#     legend = :topright
+# )
 
-plot!( 
-    twinx(fig),
-    position_list, depth_list,
-    seriestype = :line,
-    marker = :xcross,
-    label = nothing,
-    x_lims = [0, 1],
-    y_lims = [0, 8],
-    ylabel = "depth"
-)
+# plot!( 
+#     twinx(fig),
+#     position_list, depth_list,
+#     seriestype = :line,
+#     marker = :xcross,
+#     label = nothing,
+#     x_lims = [0, 1],
+#     y_lims = [0, 8],
+#     ylabel = "depth"
+# )
 
 
-savefig(fig, "../image/criteria1/test2/coef1.0/test_crit1_" * string(N_points) * ".png")
-
+# savefig(fig, "../image/criteria1/test2/coef0.0/test_crit1_" * string(N_points) * ".png")
 

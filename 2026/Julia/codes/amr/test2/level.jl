@@ -92,7 +92,7 @@ end
 
 # Function that initialize a level 
 function initialize_level(level::Level, eta::Float64, N_points_base::Int64)
-    println("depth = ", level.depth)
+
     # Defintion of the local variables 
     child_level::Union{Level, Nothing} = nothing
     N::Int64 = 0
@@ -119,7 +119,7 @@ function initialize_level(level::Level, eta::Float64, N_points_base::Int64)
     # println("tol = ", tol)
 
     if level.depth == 1
-        tol = 1.0 * tol
+        tol = 0.001 * tol
     end
 
 
@@ -165,8 +165,6 @@ end
 # Function that adpat a level 
 function adapt_level!(level::Level, eta::Float64, N_points_base::Int64)
     
-
-    println("depth = ", level.depth)
     # Defintion of the local variables 
     N::Int64 = 0
     tol::Float64 = 0.0
@@ -191,7 +189,7 @@ function adapt_level!(level::Level, eta::Float64, N_points_base::Int64)
     tol = sqrt(eta / (2 * N))
 
     if level.depth == 1
-        tol = 1.0 * tol
+        tol = 0.001 * tol
     end
 
 
