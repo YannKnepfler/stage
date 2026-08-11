@@ -34,6 +34,100 @@ function move!(level::Union{Level, Nothing}, gap::Float64)
 
 end
 
+function vizulisation(base_level::Level, N_ite::Int64, gap::Float64, d_max::Int64, dir_out::String)
+    
+    # Initialization 
+    initialize!(base_level, d_max)
+
+    depth_list::Vector{Int64} = []
+    position_list::Vector{Float64} = []
+    solution_list::Vector{Float64} = []
+
+    output!(base_level.grid_list[1], 1, depth_list, position_list, solution_list)
+
+    # Plot 
+    fig = plot(
+        position_list, solution_list,
+        title = "iteration: 0",
+        marker = :xcross,
+        label = nothing,
+        seriestype = :line,
+        linecolor = :orange,
+        markercolor = :orange,
+        xlims = [0.0, 1.0],
+        ylims = [0.0, 1.0]
+    )
+
+    plot!(
+        twinx(fig),
+        position_list, depth_list,
+        marker = :xcross,
+        label = nothing,
+        seriestype = :line,
+        linecolor = :blue,
+        markercolor = :blue,
+        xlims = [0.0, 1.0],
+        ylims = [0, d_max],
+        ylabel = "depth"
+    )
+
+    file_out::String = dir_out * "test_ite_0.png" 
+
+    savefig(fig, file_out)
+
+    for ite in 1:N_ite
+
+        # Move and adapt
+        move!(base_level, ite * gap)
+
+        adapt!(base_level, d_max)
+
+        if ite % 10 == 0
+
+            depth_list = []
+            position_list = []
+            solution_list = []
+
+            output!(base_level.grid_list[1], 1, depth_list, position_list, solution_list)
+
+            # Plot
+            fig = plot(
+                position_list, solution_list,
+                title = "iteration: " * string(ite),
+                marker = :xcross,
+                label = nothing,
+                seriestype = :line,
+                linecolor = :orange,
+                markercolor = :orange,
+                xlims = [0.0, 1.0],
+                ylims = [0.0, 1.0]
+            )
+
+            plot!(
+                twinx(fig),
+                position_list, depth_list,
+                marker = :xcross,
+                label = nothing,
+                seriestype = :line,
+                linecolor = :blue,
+                markercolor = :blue,
+                xlims = [0.0, 1.0],
+                ylims = [0, d_max],
+                ylabel = "depth"
+            )
+
+            file_out = dir_out * "test_ite_" * string(ite) * ".png"
+            
+            savefig(fig, file_out)
+        end
+
+
+
+    end
+
+    return true
+end
+
 
 N_points::Int64 = 16
 N_gzones::Int64 = 2
@@ -47,27 +141,34 @@ dt::Float64 = dx
 
 base_level::Union{Level, Nothing} = Level(N_points, N_gzones, x0, dt, dx)
 
-initialize!(base_level, 8)
+N_ite::Int64 = 10
+gap::Float64 = 0.005
+d_max::Int64 = 8
+dir_out::String = "../image/criteria1/test5/"
 
-test(base_level)
+vizulisation(base_level, N_ite, gap, d_max, dir_out)
 
-println("")
-println("======================== MOVED 1 ========================")
-println("")
+# initialize!(base_level, 8)
 
-move!(base_level, 0.01 / 2.0)
+# test(base_level)
 
-adapt!(base_level, 8)
-test(base_level)
+# println("")
+# println("======================== MOVED 1 ========================")
+# println("")
 
-println("")
-println("======================== MOVED 2 ========================")
-println("")
+# move!(base_level, 0.01 / 2.0)
 
-move!(base_level, 0.01 / 2.0)
+# adapt!(base_level, 8)
+# test(base_level)
 
-adapt!(base_level, 8)
-test(base_level)
+# println("")
+# println("======================== MOVED 2 ========================")
+# println("")
+
+# move!(base_level, 0.01 / 2.0)
+
+# adapt!(base_level, 8)
+# test(base_level)
 
 
 
