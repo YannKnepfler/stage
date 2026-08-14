@@ -238,7 +238,7 @@ end
 
 function swap_current_and_previous_solution!(grid::Grid)
 
-    for ind in grid.box.inside_ind
+    for ind in 1 : grid.n_points  + 2 * grid.n_gzones
         grid.u[ind] = grid.u_p[ind]
     end
 
@@ -261,6 +261,9 @@ function regrid_one_grid(grid::Grid)
 
             # Prolongate the new child 
             prolongate_grid!(new_child)
+
+            # Compute the boundary conditions
+            compute_boundary_condition_on_grid!(new_child)
 
             # Add the new child to the new children list 
             push!(new_children, new_child)
@@ -337,6 +340,8 @@ function find_error_boxes(grid::Grid)
 
     end
 
+
+
     return child_box_list
 
 end
@@ -375,7 +380,7 @@ function prolongate_grid!(child::Grid)
     # Update the rest
     for parent_i in istart : iend
 
-        # Identifying the child index 
+        # Identify the child index 
         child_i = (parent_i - child.box.lbnd) * 2 + child.n_gzones + 1
         
         # Compute the slope 
@@ -478,7 +483,7 @@ function reconnect_child_list!(parent_list::Vector{Grid}, child_list::Vector{Gri
     # Loop on the child grid 
     for child in child_list
 
-        # Identifying the parent grid
+        # Identify the parent grid
         parent_of_child = nothing 
 
         for parent in parent_list
@@ -534,7 +539,7 @@ function restrict_grid!(child::Grid)
     # Correction of the overlapping control volumes
     for parent_i in istart : iend
 
-        # Identifying the first child control volume 
+        # Identify the first child control volume 
         child_i = (parent_i - child.box.lbnd) * 2 + child.n_gzones + 1
 
         # Update the parent control volume 
@@ -548,7 +553,7 @@ end
 function update_previous_solution!(grid::Grid)
 
     # Copy u on u_p
-    for ind in eachindex(grid.u)
+    for ind in 1 : grid.n_points + 2 * grid.n_gzones
         grid.u_p[ind] = grid.u[ind]
     end
 
@@ -566,6 +571,38 @@ function compute_boundary_condition_on_grid!(grid::Grid)
         for ind in grid.box.lgzone_ind
             grid.u[ind] = exact_solution(grid.t, grid.x[ind])
         end
+
+    else # Prolongate the left ghost zone 
+        
+        # Declaration of the local variables 
+        istart = grid.box.lbnd - div(grid.n_gzones, 2)
+        iend = grid.box.lbnd - 1
+
+        # Check if the number of ghostzone is odd 
+        if grid.n_gzones % 2 == 1
+            parent_i = istart - 1
+
+            # Compute the slope 
+            slope = compute_slope(grid.parent, parent_i)
+
+            # Update the ghost zone 
+            grid.u[1] = grid.parent.u[parent_i] + 0.25 * slope
+        end
+
+        # Update the rest 
+        for parent_i in istart : iend
+
+            # Identify the child control volume index 
+            child_i = (parent_i - child.box.lbnd) * 2 + child.n_gzones + 1
+
+            # Compute the slope 
+            slope = compute_slope(grid.parent, parent_i)
+
+            # Update the ghost zone 
+            grid.u[child_i]     = grid.parent[parent_i] - 0.25 * slope
+            grid.u[child_i + 1] = grid.parent[parent_i] + 0.25 * slope
+        end
+        
     end
 
     # Right boundary 
@@ -573,6 +610,39 @@ function compute_boundary_condition_on_grid!(grid::Grid)
         for ind in grid.box.rgzone_ind
             grid.u[ind] = exact_solution(grid.t, grid.x[ind])
         end
+
+    else # Prolongate the right ghost zone 
+
+        # Declaration of the local variables
+        istart = grid.box.ubnd + 1
+        iend = grid.box.ubnd + div(grid.n_gzones, 2)
+
+        # Check if the number of ghost zoe is odd 
+        if grid.n_gzones % 2 == 1
+            parent_i = iend + 1 
+
+            # Compute the slope 
+            slope = compute_slope(grid.parent, parent_i)
+            
+            # Update the ghost zone 
+            grid.u[end] = grid.parent.u[parent_i] - 0.25 * slope
+        end
+
+        # Update the rest 
+        for parent_i in istart : iend
+
+            # Identify the child control volume index 
+            child_i = (parent_i - child.box.lbnd) * 2 + child.n_gzones + 1
+
+            # Compute the slope 
+            slope = compute_slope(grid.parent, parent_i)
+
+            # Update the ghost zone 
+            grid.u[child_i]     = grid.parent[parent_i] - 0.25 * slope
+            grid.u[child_i + 1] = grid.parent[parent_i] + 0.25 * slope
+        end
+
+
     end
 
     return nothing

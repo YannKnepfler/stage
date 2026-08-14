@@ -5,16 +5,13 @@ include("level.jl")
 
 function advance(grid::Grid)
 
-    # Compute the boundary conditions 
-    compute_boundary_condition_on_grid!(grid)
-
-    # Definition of the locql variables 
+    # Definition of the local variables 
     new_u::Vector{Float64} = Vector{Float64}(undef, grid.n_points + 2 * grid.n_gzones)
 
+    # Update the inside points
     for ind in grid.box.inside_ind
         new_u[ind] = grid.u[ind] - grid.dt * (compute_flux(grid.u, ind)) / grid.dx
     end
-
     return new_u
     
 end
@@ -46,8 +43,6 @@ function initialize!(level::Union{Level, Nothing})
         initialize_level!(level)
 
         if level.depth < max_depth
-            
-            compute_local_error!(level)
 
             regrid_level!(level)
 
@@ -63,6 +58,7 @@ function test(level::Union{Level, Nothing})
 
     if !isnothing(level)
         println("depth: ", level.depth, ", number of grid: ", length(level.grid_list), ", x0 = ", level.grid_list[1].x0)
+        println(level.grid_list[1].u)
         test(level.child)
     end
 
@@ -83,13 +79,13 @@ function vizulisation(base_level::Level, iteration::Int64, dir_out::String)
     # Plot 
     fig = plot(
     position_list, solution_list,
-    title = @sprintf("iteration = %d", iteration),
+    title = @sprintf("time = %f ", base_level.grid_list[1].t),
     marker = :xcross,
     label = nothing,
     seriestype = :line,
     linecolor = :orange,
     markercolor = :orange,
-    xlims = [0.0, 1.0],
+    xlims = [0.0, 1.0], 
     ylims = [0.0, 1.0]
     )
 
@@ -133,7 +129,7 @@ n_gzones::Int64 = 1
 x0::Float64 = 0.0
 l::Float64 = 1.0
 dx::Float64 = (l - x0) / n_points
-dt::Float64 =   dx #/ (2.0^(max_depth - 1))
+dt::Float64 =   0.9 * dx / (2.0^(max_depth - 1))
 
 tfinal::Float64 = 0.5
 
@@ -144,17 +140,38 @@ base_level::Level = Level(n_points, n_gzones, x0, dt, dx)
 # Initialization 
 initialize!(base_level)
 
+# test(base_level)
+
 if out 
     vizulisation(base_level, 0, dir_out)
 end
 
-base_grid::Grid = base_level.child.grid_list[1]
 
-for ind in base_grid.box.inside_ind
-    if base_grid.local_error[ind] > 0.0
-        println(base_grid.x[ind])
-    end
+
+
+# Compute the solution
+iteration = 0
+
+while iteration < 200
+
+    # Update the iteration count 
+    global iteration 
+    iteration += 1
+    
+    
+    # Evolve the solution 
+    evolve_level!(base_level)
+
+
+
+    # test(base_level)
+    if out && (iteration % 10 == 0)
+        vizulisation(base_level, iteration, dir_out) 
+    end 
+
 end
+
+
 
 
 

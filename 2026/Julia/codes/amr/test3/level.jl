@@ -140,10 +140,13 @@ function evolve_level!(level::Level)
 
     # Advance the level 
     for grid in level.grid_list
+
+        # Advance the solution
         advance_grid!(grid, advance)
 
         # Update the time 
         update_time_on_grid(grid::Grid)
+
     end
 
     # Advance the child level
@@ -159,6 +162,9 @@ function evolve_level!(level::Level)
             restrict_grid!(grid)
         end
     end
+
+    # Update the ghost zones 
+    compute_boundary_condition!(level)
 
     # Update the previous solution u_p 
     for grid in level.grid_list
@@ -180,6 +186,14 @@ function compute_local_error!(level::Level)
     
     return nothing
 
+end
+
+function compute_boundary_condition!(level::Level)
+
+    for grid in level.grid_list
+        compute_boundary_condition_on_grid!(grid)
+    end
+    return nothing 
 end
 
 function output!(grid::Grid, depth::Int64, position_list::Vector{Float64}, solution_list::Vector{Float64}, depth_list::Vector{Int64})
@@ -246,8 +260,7 @@ function output!(grid::Grid, depth::Int64, position_list::Vector{Float64}, solut
   
 
         end
-    end
-    
+    end    
 
     return nothing
 end
