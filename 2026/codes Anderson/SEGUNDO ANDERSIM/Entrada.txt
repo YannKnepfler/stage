@@ -7,7 +7,7 @@ Inclinação (rad):
 Número de segmentos:
 300
 Tempo de simulação (s):
-0.2
+0.4
 Velocidade de entrada de líquido (m/s):
 10.0
 Velocidade de entrada de gás (m/s):

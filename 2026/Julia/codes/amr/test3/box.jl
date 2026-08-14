@@ -21,9 +21,6 @@ mutable struct Box
     lgzone_ind::UnitRange{Int64}
     rgzone_ind::UnitRange{Int64}
 
-    # The base box does not need buffer zones 
-    without_bz::UnitRange{Int64}
-
 
     # Constructor
 
@@ -45,9 +42,8 @@ mutable struct Box
         inside_ind::UnitRange{Int64} = (n_gzones + 1) : (n_gzones + n_points)
         lgzone_ind::UnitRange{Int64} = 1 : n_gzones
         rgzone_ind::UnitRange{Int64} = (n_gzones + n_points) : (2 * n_gzones + n_points)
-        without_bz::UnitRange{Int64} = inside_ind
 
-        new(n_points, n_gzones, lbnd, ubnd, bbox, inside_ind, lgzone_ind, rgzone_ind, without_bz)
+        new(n_points, n_gzones, lbnd, ubnd, bbox, inside_ind, lgzone_ind, rgzone_ind)
     end
 
     # Child box constructor 
@@ -73,27 +69,8 @@ mutable struct Box
             end
         end
 
-        # Creation of buffer zone if needed and definition of the inside and non buffer cells index range
-        new_lbnd::Int64 = lbnd
-        new_ubnd::Int64 = ubnd
-
-        # Left border
-        i_start = n_gzones + 1
-        if !(bbox[1])
-            new_lbnd = lbnd - 1
-            i_start += 2
-        end
-
-        # Right border
-        i_end = i_start - 1 + (ubnd - lbnd + 1) * 2
-        if !(bbox[2])
-            new_ubnd = ubnd + 1
-        end
-
-        without_bz::UnitRange{Int64} = i_start : i_end
-
         # Number of points 
-        n_points::Int64 = (new_ubnd - new_lbnd + 1) * 2
+        n_points::Int64 = (ubnd - lbnd + 1) * 2 
                
 
         # Definition of the index range 
@@ -102,7 +79,7 @@ mutable struct Box
         rgzone_ind::UnitRange{Int64} = (n_gzones + n_points) : (2 * n_gzones + n_points)
 
 
-        new(n_points, n_gzones, new_lbnd, new_ubnd, bbox, inside_ind, lgzone_ind, rgzone_ind, without_bz)
+        new(n_points, n_gzones, lbnd, ubnd, bbox, inside_ind, lgzone_ind, rgzone_ind)
     end
 end
 

@@ -1,0 +1,4 @@
+n_points       = 128
+amr_parqameter = 0.5
+epsilon        = e-3
+max_depth      = 8
