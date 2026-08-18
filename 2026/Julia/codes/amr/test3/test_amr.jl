@@ -19,7 +19,6 @@ end
 function lohner_err_estimator!(grid::Grid, epsilon::Float64)
 
     for ind in grid.box.inside_ind
-
         if ind == grid.box.inside_ind[1]
             grid.local_error[ind] = 0.0
         elseif ind == grid.box.inside_ind[end]
@@ -78,15 +77,26 @@ function vizulisation(base_level::Level, iteration::Int64, dir_out::String)
 
     # Plot 
     fig = plot(
-    position_list, solution_list,
-    title = @sprintf("time = %f ", base_level.grid_list[1].t),
-    marker = :xcross,
-    label = nothing,
-    seriestype = :line,
-    linecolor = :orange,
-    markercolor = :orange,
-    xlims = [0.0, 1.0], 
-    ylims = [0.0, 1.0]
+        position_list, solution_list,
+        title = @sprintf("time = %f ", base_level.grid_list[1].t),
+        marker = :xcross,
+        label = "solution",
+        legend = :topright,
+        seriestype = :line,
+        linecolor = :orange,
+        markercolor = :orange,
+        xlims = [0.0, 1.0], 
+        ylims = [0.0, 1.0]
+    )
+
+    plot!(
+        fig,
+        [NaN], [NaN],
+        marker = :xcross,
+        label = "level",
+        seriestype = :line,
+        linecolor = :blue,
+        markercolor = :blue
     )
 
     plot!(
@@ -94,6 +104,7 @@ function vizulisation(base_level::Level, iteration::Int64, dir_out::String)
         position_list, depth_list,
         marker = :xcross,
         label = nothing,
+        legend = :topright,
         seriestype = :line,
         linecolor = :blue,
         markercolor = :blue,
@@ -120,7 +131,7 @@ end
 
 # Declaration of the variables 
 
-dir_out::String = "../image/criteria2/test3/"
+dir_out::String = "../image/criteria2/test6/"
 
 out::Bool = true
 
@@ -129,7 +140,7 @@ n_gzones::Int64 = 1
 x0::Float64 = 0.0
 l::Float64 = 1.0
 dx::Float64 = (l - x0) / n_points
-dt::Float64 =   0.9 * dx / (2.0^(max_depth - 1))
+dt::Float64 =   cfl * dx / (2.0^(max_depth - 1))
 
 tfinal::Float64 = 0.5
 
@@ -152,7 +163,7 @@ end
 # Compute the solution
 iteration = 0
 
-while iteration < 200
+while base_level.grid_list[1].t < tfinal
 
     # Update the iteration count 
     global iteration 

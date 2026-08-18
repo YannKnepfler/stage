@@ -7,7 +7,7 @@ function exact_solution(t::Float64, x::Float64)
 end
 
 function initial_condition(x::Float64)
-    if x <= 0.2
+    if 0.1 < x < 0.2
         return 1.0
     else
         return 0.1
