@@ -86,10 +86,8 @@ function regrid_level!(level::Level)
             # Ensure proper nesting 
             add_children_to_errors!(grid)
 
-            # Clear the children lists 
-            for grid in level.grid_list
-                grid.children = Vector{Grid}(undef, 0)
-            end
+            # Clear the children list 
+            grid.children = Vector{Grid}(undef, 0)
 
             # Find the new children
             append!(new_child_list, regrid_one_grid(grid))
@@ -281,4 +279,37 @@ function output!(grid::Grid, depth::Int64, position_list::Vector{Float64}, solut
     end    
 
     return nothing
+end
+
+function update_dt!(base_level::Level)
+
+    # Declaration of the local variables 
+    level::Union{Level, Nothing} = base_level
+
+    # Look for finest level 
+    while !isnothing(level.child)
+        level = level.child
+    end
+
+    # Compute the time step value 
+    dt::Float64 = cfl * level.grid_list[1].dx
+
+    # Update the time step value on every level 
+    level = base_level
+    while !isnothing(level)
+        update_dt_on_level!(dt, level)
+        level = level.child
+    end
+
+    return nothing 
+end
+
+function update_dt_on_level!(dt::Float64, level::Level)
+
+    # Loop on the grid 
+    for grid in level.grid_list
+        update_dt_on_grid!(dt, grid)
+    end
+
+    return nothing 
 end

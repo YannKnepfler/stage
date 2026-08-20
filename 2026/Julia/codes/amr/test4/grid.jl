@@ -191,7 +191,6 @@ function advance_grid!(grid::Grid, advance::Function)
     return nothing
 end
 
-
 function apply_error_estimator!(grid::Grid, err_estimator!::Function)
 
     # Update the local error 
@@ -529,7 +528,7 @@ function restrict_grid!(child::Grid)
 
         # Update child local error 
         child.local_error[child_i] = abs((child.parent.u[parent_i] - 0.5 * (child.u[child_i] + child.u[child_i + 1])))
-
+        child.local_error[child_i + 1] = child.local_error[child_i]
         # Update the parent control volume 
         child.parent.u[parent_i] = 0.5 * (child.u[child_i] + child.u[child_i + 1])
 
@@ -645,3 +644,9 @@ function set_initial_local_error_on_grid!(grid::Grid)
     return nothing
 
 end
+
+function update_dt_on_grid!(dt::Float64, grid::Grid)
+    grid.dt = dt
+    return nothing 
+end
+

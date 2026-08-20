@@ -1,0 +1,8 @@
+amr_parameter = 0.2
+amr_buffer_width = 4
+max_depth 3
+epsilon = 0.01
+cfl = 1.0
+
+n_points = 128 
+n_gzones = 1 

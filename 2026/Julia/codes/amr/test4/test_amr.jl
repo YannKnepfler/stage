@@ -115,11 +115,11 @@ end
 
 # Declaration of the variables 
 
-dir_out::String = "../image/criteria3/test6/"
+dir_out::String = "../image/criteria3/test1/"
 
 out::Bool = true
 
-n_points::Int64 = 32
+n_points::Int64 = 64
 n_gzones::Int64 = 1
 x0::Float64 = 0.0
 l::Float64 = 1.0
@@ -147,6 +147,9 @@ while level_0.grid_list[1].t < tfinal
     # Update the iteration
     global iteration 
     iteration += 1
+
+    # Update the time step value
+    update_dt!(level_0)
 
     # Advance the solution 
     evolve_level!(level_0)

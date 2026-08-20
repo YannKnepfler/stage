@@ -6,4 +6,4 @@ const global  amr_buffer_width::Float64 = 4
 
 const global max_depth = 3
 # 
-const global cfl = 0.5
+const global cfl = 1.0

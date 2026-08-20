@@ -56,8 +56,7 @@ end
 function test(level::Union{Level, Nothing})
 
     if !isnothing(level)
-        println("depth: ", level.depth, ", number of grid: ", length(level.grid_list), ", x0 = ", level.grid_list[1].x0)
-        println(level.grid_list[1].u)
+        println("depth: ", level.depth, ", number of grid: ", length(level.grid_list), ", x0 = ", level.grid_list[1].x0, ", is child nothing, ", isnothing(level.child) )
         test(level.child)
     end
 
@@ -131,7 +130,7 @@ end
 
 # Declaration of the variables 
 
-dir_out::String = "../image/criteria2/test6/"
+dir_out::String = "../image/criteria2/test2/"
 
 out::Bool = true
 
@@ -168,12 +167,12 @@ while base_level.grid_list[1].t < tfinal
     # Update the iteration count 
     global iteration 
     iteration += 1
-    
+
+    # Update the time step value 
+    update_dt!(base_level)    
     
     # Evolve the solution 
     evolve_level!(base_level)
-
-
 
     # test(base_level)
     if out && (iteration % 10 == 0)
@@ -181,6 +180,7 @@ while base_level.grid_list[1].t < tfinal
     end 
 
 end
+
 
 
 

@@ -593,14 +593,14 @@ function compute_boundary_condition_on_grid!(grid::Grid)
         for parent_i in istart : iend
 
             # Identify the child control volume index 
-            child_i = (parent_i - child.box.lbnd) * 2 + child.n_gzones + 1
+            child_i = (parent_i - grid.box.lbnd) * 2 + grid.n_gzones + 1
 
             # Compute the slope 
             slope = compute_slope(grid.parent, parent_i)
 
             # Update the ghost zone 
-            grid.u[child_i]     = grid.parent[parent_i] - 0.25 * slope
-            grid.u[child_i + 1] = grid.parent[parent_i] + 0.25 * slope
+            grid.u[child_i]     = grid.parent.u[parent_i] - 0.25 * slope
+            grid.u[child_i + 1] = grid.parent.u[parent_i] + 0.25 * slope
         end
         
     end
@@ -632,19 +632,24 @@ function compute_boundary_condition_on_grid!(grid::Grid)
         for parent_i in istart : iend
 
             # Identify the child control volume index 
-            child_i = (parent_i - child.box.lbnd) * 2 + child.n_gzones + 1
+            child_i = (parent_i - grid.box.lbnd) * 2 + grid.n_gzones + 1
 
             # Compute the slope 
             slope = compute_slope(grid.parent, parent_i)
 
             # Update the ghost zone 
-            grid.u[child_i]     = grid.parent[parent_i] - 0.25 * slope
-            grid.u[child_i + 1] = grid.parent[parent_i] + 0.25 * slope
+            grid.u[child_i]     = grid.parent.u[parent_i] - 0.25 * slope
+            grid.u[child_i + 1] = grid.parent.u[parent_i] + 0.25 * slope
         end
 
 
     end
 
     return nothing
+end
+
+function update_dt_on_grid!(dt::Float64, grid::Grid)
+    grid.dt = dt
+    return nothing 
 end
 
