@@ -180,13 +180,11 @@ function initialize_grid!(grid::Grid)
     return nothing
 end
 
-function advance_grid!(grid::Grid, advance::Function)
+function advance_grid!(grid::Grid, advance!::Function)
 
-    # Definition of the local variable
-    new_u::Vector{Float64} = advance(grid)
 
     # Update of the solution 
-    grid.u = new_u
+    advance!(grid)
 
     return nothing
 end
@@ -375,7 +373,6 @@ function prolongate_grid!(child::Grid)
         # Update the ghost zone
         child.u[end] = child.parent.u[parent_i] - 0.25 * slope
 
-
     end
 
     # Update the rest
@@ -393,7 +390,6 @@ function prolongate_grid!(child::Grid)
         child.u[child_i + 1] = child.parent.u[parent_i] + 0.25 * slope
 
     end
-
 
     return nothing 
 end
@@ -444,6 +440,9 @@ function copy_data_from_grid_list!(new_grid_list::Vector{Grid}, old_grid_list::V
                 new_grid.u[istart : iend] = old_grid.u[(istart + offset) : (iend + offset)]
             end
         end
+
+        # Update the previous solution 
+        update_previous_solution!(new_grid)
     end
 end
 
@@ -546,6 +545,32 @@ function restrict_grid!(child::Grid)
         # Update the parent control volume 
         child.parent.u[parent_i] = 0.5 * (child.u[child_i] + child.u[child_i + 1])
 
+    end
+
+    # Correct flux at the grid interface
+
+    # # Left boundary 
+    # if !child.box.bbox[1]
+    #     parent_i = child.box.lbnd - 1
+
+    #     # Compute fluxes 
+    #     old_flux = compute_flux(child.parent.u_p, parent_i + 1)
+    #     new_flux = compute_flux(child.u_p, child.box.inside_ind[1])
+
+    #     # Correct the parent grid 
+    #     child.parent.u[parent_i] += child.parent.dt
+    # end
+    
+    # Right boundary
+    if !child.box.bbox[2]
+        parent_i = child.box.ubnd + 1
+
+        # Compute fluxes 
+        old_flux = compute_flux(child.parent.u_p, parent_i)
+        new_flux = compute_flux(child.u_p, child.box.inside_ind[end] + 1)
+
+        # Correct the parent grid 
+        child.parent.u[parent_i] += child.parent.dt * (new_flux - old_flux) / child.parent.dx
     end
 
     return nothing 

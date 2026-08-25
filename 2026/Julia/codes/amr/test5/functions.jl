@@ -15,6 +15,6 @@ function initial_condition(x::Float64)
 end
 
 function compute_flux(u::Vector{Float64}, ind::Int64)
-    return u[ind] - u[ind - 1]
+    return u[ind - 1]
 end
 

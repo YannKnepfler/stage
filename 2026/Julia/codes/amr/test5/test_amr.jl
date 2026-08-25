@@ -3,16 +3,13 @@ using Printf
 
 include("level.jl")
 
-function advance(grid::Grid)
+function advance!(grid::Grid)
 
-    # Definition of the local variables 
-    new_u::Vector{Float64} = Vector{Float64}(undef, grid.n_points + 2 * grid.n_gzones)
 
     # Update the inside points
     for ind in grid.box.inside_ind
-        new_u[ind] = grid.u[ind] - grid.dt * (compute_flux(grid.u, ind)) / grid.dx
+        grid.u[ind] = grid.u_p[ind] - grid.dt * (compute_flux(grid.u_p, ind + 1) - compute_flux(grid.u_p, ind)) / grid.dx
     end
-    return new_u
     
 end
 
@@ -135,7 +132,7 @@ dir_out::String = "../image/criteria4/test3/"
 
 out::Bool = false
 
-n_points::Int64 = 128
+n_points::Int64 = 32
 n_gzones::Int64 = 1
 x0::Float64 = 0.0
 l::Float64 = 1.0

@@ -134,7 +134,7 @@ function evolve_level!(level::Level)
     for grid in level.grid_list
 
         # Advance the solution
-        advance_grid!(grid, advance)
+        advance_grid!(grid, advance!)
 
         # Update the time 
         update_time_on_grid(grid::Grid)
