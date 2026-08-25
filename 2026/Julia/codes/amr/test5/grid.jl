@@ -663,7 +663,6 @@ function is_refined(grid::Grid, ind::Int64)
     return result 
 end
 
-
 function update_dt_on_grid!(dt::Float64, grid::Grid)
     grid.dt = dt
     return nothing 

@@ -131,16 +131,16 @@ end
 
 # Declaration of the variables 
 
-dir_out::String = "../image/criteria4/test1/"
+dir_out::String = "../image/criteria4/test3/"
 
-out::Bool = true
+out::Bool = false
 
 n_points::Int64 = 128
 n_gzones::Int64 = 1
 x0::Float64 = 0.0
 l::Float64 = 1.0
 dx::Float64 = (l - x0) / n_points
-dt::Float64 =   cfl * dx / (2.0^(max_depth - 1))
+dt::Float64 =   0.0
 
 tfinal::Float64 = 0.5
 
@@ -171,6 +171,13 @@ while base_level.grid_list[1].t < tfinal
 
     # Update the time step value 
     update_dt!(base_level)    
+
+    # Check the number of level 
+    level::Level = base_level
+    while !isnothing(level.child) 
+        level = level.child
+    end
+
     
     # Evolve the solution 
     evolve_level!(base_level)
@@ -181,6 +188,27 @@ while base_level.grid_list[1].t < tfinal
     end 
 
 end
+
+
+# Compute the global error 
+
+position_list::Vector{Float64} = []
+solution_list::Vector{Float64} = []
+depth_list::Vector{Int64} = []
+
+output!(base_level.grid_list[1], 1, position_list, solution_list, depth_list)
+
+err_glob::Float64 = 0.0
+
+for ind in eachindex(position_list)
+    global err_glob
+    err_glob += (dx / 2.0^(depth_list[ind] - 1)) * (solution_list[ind] - exact_solution(base_level.grid_list[1].t, position_list[ind]))^2
+end
+
+
+
+println("max_depth: ", max_depth, ", global error: ", sqrt(err_glob))
+
 
 
 

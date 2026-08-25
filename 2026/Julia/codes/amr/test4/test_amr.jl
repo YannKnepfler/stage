@@ -117,7 +117,7 @@ end
 
 dir_out::String = "../image/criteria3/test1/"
 
-out::Bool = true
+out::Bool = false
 
 n_points::Int64 = 64
 n_gzones::Int64 = 1
@@ -160,6 +160,26 @@ while level_0.grid_list[1].t < tfinal
         vizulisation(level_0.child, iteration, dir_out)
     end
 end
+
+
+# Compute the global error 
+
+position_list::Vector{Float64} = []
+solution_list::Vector{Float64} = []
+depth_list::Vector{Int64} = []
+
+output!(level_0.child.grid_list[1], 1, position_list, solution_list, depth_list)
+
+err_glob::Float64 = 0.0
+
+for ind in eachindex(position_list)
+    global err_glob
+    err_glob += (dx / 2.0^(depth_list[ind])) * (solution_list[ind] - exact_solution(level_0.grid_list[1].t, position_list[ind]))^2
+end
+
+
+
+println("max_depth: ", max_depth, ", global error: ", sqrt(err_glob))
 
 
 

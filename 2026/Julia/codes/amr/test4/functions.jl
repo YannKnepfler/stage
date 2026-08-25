@@ -7,7 +7,7 @@ function exact_solution(t::Float64, x::Float64)
 end
 
 function initial_condition(x::Float64)
-    return exp(-((x-0.25)/0.05)^2)
+    return exp(-((x - 0.25)/0.05)^2)
 end
 
 function compute_flux(u::Vector{Float64}, ind::Int64)

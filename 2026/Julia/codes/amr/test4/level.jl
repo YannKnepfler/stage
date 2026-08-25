@@ -95,11 +95,8 @@ function regrid_level!(level::Level)
         end
 
         # Set a new child level if needed 
-        if !isnothing(level.child) || length(new_child_list) > 0
-            if isnothing(level.child)
-                # Create a new child level 
-                level.child = Level(level)
-            end
+        if isnothing(level.child) && !isempty(new_child_list)
+            level.child = Level(level)
         end
 
 

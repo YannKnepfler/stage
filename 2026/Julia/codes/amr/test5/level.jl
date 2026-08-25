@@ -92,13 +92,10 @@ function regrid_level!(level::Level)
         end
 
         # Set a new child level if needed 
-        if !isnothing(level.child) || length(new_child_list) > 0
-            if isnothing(level.child)
-                # Create a new child level 
-                level.child = Level(level)
-            end
+        if isnothing(level.child) && !isempty(new_child_list)
+            # Create a new child level 
+            level.child = Level(level)
         end
-
 
         # Replace the child grid_list
         if length(new_child_list) > 0
@@ -266,7 +263,7 @@ function update_dt!(base_level::Level)
     level::Union{Level, Nothing} = base_level
 
     # Look for finest level 
-    while !isnothing(level.child)
+    while !isnothing(level.child) && !isempty(level.child.grid_list)
         level = level.child
     end
 

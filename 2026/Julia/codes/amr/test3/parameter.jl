@@ -4,7 +4,7 @@
 const global amr_parameter::Float64 = 0.2
 const global amr_buffer_width::Float64 = 4
 
-const global max_depth = 3
+const global max_depth = 4
 
 const global epsilon = 0.01
 
