@@ -5,7 +5,6 @@ include("level.jl")
 
 function advance!(grid::Grid)
 
-
     # Update the inside points
     for ind in grid.box.inside_ind
         grid.u[ind] = grid.u_p[ind] - grid.dt * (compute_flux(grid.u_p, ind + 1) - compute_flux(grid.u_p, ind)) / grid.dx
@@ -132,7 +131,7 @@ dir_out::String = "../image/criteria4/test3/"
 
 out::Bool = false
 
-n_points::Int64 = 32
+n_points::Int64 = 128
 n_gzones::Int64 = 1
 x0::Float64 = 0.0
 l::Float64 = 1.0

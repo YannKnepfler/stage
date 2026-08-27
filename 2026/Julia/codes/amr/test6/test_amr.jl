@@ -8,7 +8,7 @@ function advance!(grid::Grid)
 
     # Update the inside points
     for ind in grid.box.inside_ind
-        grid.u[ind] = grid.u_p[ind] - grid.dt * (compute_flux(grid.u_p, ind + 1) - compute_flux(grid.u_p, ind)) / grid.dx
+        grid.u[ind] = (grid.u_p[ind] + grid.dt * grid.u[ind - 1] / grid.dx) / (1.0 + grid.dt / grid.dx)
     end
     
 end
@@ -128,16 +128,16 @@ end
 
 # Declaration of the variables 
 
-dir_out::String = "../image/criteria4/test3/"
+dir_out::String = "../image/criteria5/test1/"
 
-out::Bool = false
+out::Bool = true
 
 n_points::Int64 = 128
 n_gzones::Int64 = 1
 x0::Float64 = 0.0
 l::Float64 = 1.0
 dx::Float64 = (l - x0) / n_points
-dt::Float64 =   0.0
+dt::Float64 =   0.001
 
 tfinal::Float64 = 0.5
 
@@ -167,7 +167,7 @@ while base_level.grid_list[1].t < tfinal
     iteration += 1
 
     # Update the time step value 
-    update_dt!(base_level)    
+    # update_dt!(base_level)    
 
     # Check the number of level 
     level::Level = base_level

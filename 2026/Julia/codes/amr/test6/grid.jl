@@ -554,8 +554,8 @@ function restrict_grid!(child::Grid)
         parent_i = child.box.ubnd + 1
 
         # Compute fluxes 
-        old_flux = compute_flux(child.parent.u_p, parent_i)
-        new_flux = compute_flux(child.u_p, child.box.inside_ind[end] + 1)
+        old_flux = compute_flux(child.parent.u, parent_i)
+        new_flux = compute_flux(child.u, child.box.inside_ind[end] + 1)
 
         # Correct the parent grid 
         child.parent.u[parent_i] += child.parent.dt * (new_flux - old_flux) / child.parent.dx
@@ -600,7 +600,7 @@ function compute_boundary_condition_on_grid!(grid::Grid)
             slope = compute_slope(grid.parent, parent_i)
 
             # Update the ghost zone 
-            grid.u[1] = grid.parent.u[parent_i] + 0.25 * slope
+            grid.u[1] = grid.parent.u[parent_i] #+ 0.25 * slope
         end
 
         # Update the rest 
@@ -639,7 +639,7 @@ function compute_boundary_condition_on_grid!(grid::Grid)
             slope = compute_slope(grid.parent, parent_i)
             
             # Update the ghost zone 
-            grid.u[end] = grid.parent.u[parent_i] - 0.25 * slope
+            grid.u[end] = grid.parent.u[parent_i]# - 0.25 * slope
         end
 
         # Update the rest 

@@ -612,7 +612,7 @@ function compute_boundary_condition_on_grid!(grid::Grid)
             slope = compute_slope(grid.parent, parent_i)
 
             # Update the ghost zone 
-            grid.u[1] = grid.parent.u[parent_i] + 0.25 * slope
+            grid.u[1] = grid.parent.u[parent_i] #+ 0.25 * slope
         end
 
         # Update the rest 
@@ -651,7 +651,7 @@ function compute_boundary_condition_on_grid!(grid::Grid)
             slope = compute_slope(grid.parent, parent_i)
             
             # Update the ghost zone 
-            grid.u[end] = grid.parent.u[parent_i] - 0.25 * slope
+            grid.u[end] = grid.parent.u[parent_i] #- 0.25 * slope
         end
 
         # Update the rest 
