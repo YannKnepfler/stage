@@ -549,17 +549,17 @@ function restrict_grid!(child::Grid)
 
     # Correct flux at the grid interface
 
-    # # Left boundary 
-    # if !child.box.bbox[1]
-    #     parent_i = child.box.lbnd - 1
+    # Left boundary 
+    if !child.box.bbox[1]
+        parent_i = child.box.lbnd - 1
 
-    #     # Compute fluxes 
-    #     old_flux = compute_flux(child.parent.u_p, parent_i + 1)
-    #     new_flux = compute_flux(child.u_p, child.box.inside_ind[1])
+        # Compute fluxes 
+        old_flux = compute_flux(child.parent.u_p, parent_i + 1)
+        new_flux = compute_flux(child.u_p, child.box.inside_ind[1])
 
-    #     # Correct the parent grid 
-    #     child.parent.u[parent_i] += child.parent.dt
-    # end
+        # Correct the parent grid 
+        child.parent.u[parent_i] += child.parent.dt
+    end
     
     # Right boundary
     if !child.box.bbox[2]
@@ -595,7 +595,7 @@ function compute_boundary_condition_on_grid!(grid::Grid)
     # Left boundary
     if grid.box.bbox[1]
         for ind in grid.box.lgzone_ind
-            grid.u[ind] = exact_solution(grid.t, grid.x[ind])
+            grid.u[ind] = left_boundary_condition(grid.t)
         end
 
     else # Prolongate the left ghost zone 
@@ -634,7 +634,7 @@ function compute_boundary_condition_on_grid!(grid::Grid)
     # Right boundary 
     if grid.box.bbox[2]
         for ind in grid.box.rgzone_ind
-            grid.u[ind] = exact_solution(grid.t, grid.x[ind])
+            grid.u[ind] = right_boundary_condition(grid.t)
         end
 
     else # Prolongate the right ghost zone 

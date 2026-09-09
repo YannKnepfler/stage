@@ -1,6 +1,8 @@
 using Plots
 using Printf
 
+using DataFrames, GLM
+
 include("level.jl")
 
 function advance!(grid::Grid)
@@ -120,6 +122,76 @@ function vizulisation(base_level::Level, iteration::Int64, dir_out::String)
     return nothing
 end
 
+function compute_order(n_points::Int64, n_iteration::Int64, n_gzones::Int64, x0::Float64, l::Float64, tfinal::Float64)
+
+    # Definition of the local variables
+    base_level::Level = Level()
+    err_glob::Float64 = 0.0
+    err_glb_list::Vector{Float64} = []
+    dx_list::Vector{Float64} = []
+    dt::Float64 = 0.0
+
+    
+    # Loop on the iteration
+
+    for ite in 1:n_iteration
+        new_n_points::Int64 = n_points * (2 ^(ite - 1))
+        dx::Float64 = (l - x0 ) / new_n_points
+        base_level = Level()
+        base_level = Level(new_n_points, n_gzones, x0, dt, dx)
+
+        # Initialization
+        initialize!(base_level)
+        
+        # Compute the solution
+        iteration = 0
+
+        while base_level.grid_list[1].t < tfinal 
+
+            # Update the iteration count 
+            iteration += 1
+
+            # Update the time step value 
+            update_dt!(base_level)    
+            
+            # Evolve the solution 
+            evolve_level!(base_level)
+        end
+
+        # Compute global error 
+        position_list::Vector{Float64} = []
+        solution_list::Vector{Float64} = []
+        depth_list::Vector{Int64} = []
+
+        output!(base_level.grid_list[1], 1, position_list, solution_list, depth_list)
+
+        err_glob = 0.0
+
+        for ind in eachindex(position_list)
+            err_glob += (dx / 2.0^(depth_list[ind] - 1)) * (solution_list[ind] - exact_solution(base_level.grid_list[1].t, position_list[ind]))^2
+        end
+
+        err_glob = sqrt(err_glob)
+
+        # Save 
+        push!(err_glb_list, err_glob)
+        push!(dx_list, dx)
+
+    end
+
+    # Compute the order 
+    log_dx = log.(dx_list)
+    log_err_glb = log.(err_glb_list)
+
+    data = DataFrame(X = log_dx, Y = log_err_glb)
+    
+    model = lm(@formula(Y ~ X), data)
+
+    println(coef(model))
+
+
+    return dx_list, err_glb_list
+end
 
 
 
@@ -131,7 +203,7 @@ dir_out::String = "../image/criteria4/test3/"
 
 out::Bool = false
 
-n_points::Int64 = 128
+n_points::Int64 = 512
 n_gzones::Int64 = 1
 x0::Float64 = 0.0
 l::Float64 = 1.0
@@ -140,70 +212,72 @@ dt::Float64 =   0.0
 
 tfinal::Float64 = 0.5
 
-base_level::Level = Level(n_points, n_gzones, x0, dt, dx)
+dx_list, err_list = compute_order(n_points, 5, n_gzones, x0, l, tfinal)
+
+println(err_list)
+println(dx_list)
+
+# base_level::Level = Level(n_points, n_gzones, x0, dt, dx)
 
 
 
-# Initialization 
-initialize!(base_level)
+# # Initialization 
+# initialize!(base_level)
 
-# test(base_level)
+# # test(base_level)
 
-if out 
-    vizulisation(base_level, 0, dir_out)
-end
-
-
+# if out 
+#     vizulisation(base_level, 0, dir_out)
+# end
 
 
-# Compute the solution
-iteration = 0
 
-while base_level.grid_list[1].t < tfinal
 
-    # Update the iteration count 
-    global iteration 
-    iteration += 1
+# # Compute the solution
+# iteration = 0
 
-    # Update the time step value 
-    update_dt!(base_level)    
+# while base_level.grid_list[1].t < tfinal
 
-    # Check the number of level 
-    level::Level = base_level
-    while !isnothing(level.child) 
-        level = level.child
-    end
+#     # Update the iteration count 
+#     global iteration 
+#     iteration += 1
 
+#     # Update the time step value 
+#     update_dt!(base_level)    
     
-    # Evolve the solution 
-    evolve_level!(base_level)
+#     # Evolve the solution 
+#     evolve_level!(base_level)
 
-    # test(base_level)
-    if out && (iteration % 10 == 0)
-        vizulisation(base_level, iteration, dir_out) 
-    end 
+#     # test(base_level)
+#     if out && (iteration % 10 == 0)
+#         vizulisation(base_level, iteration, dir_out) 
+#     end 
 
-end
-
-
-# Compute the global error 
-
-position_list::Vector{Float64} = []
-solution_list::Vector{Float64} = []
-depth_list::Vector{Int64} = []
-
-output!(base_level.grid_list[1], 1, position_list, solution_list, depth_list)
-
-err_glob::Float64 = 0.0
-
-for ind in eachindex(position_list)
-    global err_glob
-    err_glob += (dx / 2.0^(depth_list[ind] - 1)) * (solution_list[ind] - exact_solution(base_level.grid_list[1].t, position_list[ind]))^2
-end
+# end
 
 
+# # Compute the global error 
 
-println("max_depth: ", max_depth, ", global error: ", sqrt(err_glob))
+# position_list::Vector{Float64} = []
+# solution_list::Vector{Float64} = []
+# depth_list::Vector{Int64} = []
+
+# output!(base_level.grid_list[1], 1, position_list, solution_list, depth_list)
+
+# err_glob::Float64 = 0.0
+
+# for ind in eachindex(position_list)
+#     global err_glob
+#     err_glob += (dx / 2.0^(depth_list[ind] - 1)) * (solution_list[ind] - exact_solution(base_level.grid_list[1].t, position_list[ind]))^2
+# end
+
+
+
+
+# println("n_points: ", n_points, ", n_level: ", maximum(depth_list),  ", global error: ", sqrt(err_glob))
+
+
+
 
 
 
