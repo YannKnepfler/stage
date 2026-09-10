@@ -179,17 +179,6 @@ function compute_order(n_points::Int64, n_iteration::Int64, n_gzones::Int64, x0:
 
     end
 
-    # Compute the order 
-    log_dx = log.(dx_list)
-    log_err_glb = log.(err_glb_list)
-
-    data = DataFrame(X = log_dx, Y = log_err_glb)
-    
-    model = lm(@formula(Y ~ X), data)
-
-    println(coef(model))
-
-
     return dx_list, err_glb_list
 end
 
@@ -203,7 +192,7 @@ dir_out::String = "../image/criteria4/test3/"
 
 out::Bool = false
 
-n_points::Int64 = 512
+n_points::Int64 = 2048
 n_gzones::Int64 = 1
 x0::Float64 = 0.0
 l::Float64 = 1.0
@@ -212,74 +201,107 @@ dt::Float64 =   0.0
 
 tfinal::Float64 = 0.5
 
+
+
+color = [:blue, :orange, :green, :purple]
+
+
+
 dx_list, err_list = compute_order(n_points, 5, n_gzones, x0, l, tfinal)
 
-println(err_list)
-println(dx_list)
 
-# base_level::Level = Level(n_points, n_gzones, x0, dt, dx)
+file_out::String = "test.png"
+
+# Compute the order
+
+data =  DataFrame(dx = dx_list, err = err_list)
+
+data.logdx = log.(data.dx)
+data.logerr = log.(data.err)
+
+model = lm(@formula(logerr ~ logdx), data)
+
+a = coef(model)[2]
+b = coef(model)[1]
+
+data.fitted_logerr = predict(model)
+data.fitted_err = exp.(data.fitted_logerr)
+
+# Plot 
+
+fig = plot(
+    data.dx, data.err,
+    seriestype = :scatter,
+    xscale = :log10, yscale = :log10,
+    xlims = [10^(-5), 10^(-2)],
+    xlabel = "dx", ylabel = "global error", 
+    marker = (:xcross, 6),
+    markercolor = color[max_depth],
+    label = @sprintf("%d level", max_depth),
+    legend = :topleft
+)
+
+plot!(
+    fig, 
+    data.dx, data.fitted_err,
+    xscale = :log10, yscale = :log10,
+    linestyle = :dash,
+    linecolor = color[max_depth],
+    label = @sprintf("slope %.3f, r2 %.3f", a, r2(model)),
+    legend = :topleft
+)
+
+while max_depth < 4
+    global max_depth += 1
+    global n_points = n_points / 2
+
+    println(max_depth)
+
+    # Compute the order 
+    global dx_list, err_list = compute_order(n_points, 5, n_gzones, x0, l, tfinal)
+
+    global data =  DataFrame(dx = dx_list, err = err_list)
+
+    data.logdx = log.(data.dx)
+    data.logerr = log.(data.err)
+
+    global model = lm(@formula(logerr ~ logdx), data)
+
+    global a = coef(model)[2]
+    global b = coef(model)[1]
+
+    data.fitted_logerr = predict(model)
+    data.fitted_err = exp.(data.fitted_logerr)
+
+    # Plot 
+
+    plot!(
+        fig,
+        data.dx, data.err,
+        seriestype = :scatter,
+        xscale = :log10, yscale = :log10,
+        xlabel = "dx", ylabel = "global error", 
+        marker = (:xcross, 6),
+        markercolor = color[max_depth],
+        label = @sprintf("%d level", max_depth),
+        legend = :topleft
+    )
+
+    plot!(
+        fig, 
+        data.dx, data.fitted_err,
+        xscale = :log10, yscale = :log10,
+        linestyle = :dash,
+        linecolor = color[max_depth],
+        label = @sprintf("slope %.3f, r2 %.3f", a, r2(model)),
+        legend = :topleft
+    )
+
+end
 
 
 
-# # Initialization 
-# initialize!(base_level)
-
-# # test(base_level)
-
-# if out 
-#     vizulisation(base_level, 0, dir_out)
-# end
-
-
-
-
-# # Compute the solution
-# iteration = 0
-
-# while base_level.grid_list[1].t < tfinal
-
-#     # Update the iteration count 
-#     global iteration 
-#     iteration += 1
-
-#     # Update the time step value 
-#     update_dt!(base_level)    
-    
-#     # Evolve the solution 
-#     evolve_level!(base_level)
-
-#     # test(base_level)
-#     if out && (iteration % 10 == 0)
-#         vizulisation(base_level, iteration, dir_out) 
-#     end 
-
-# end
-
-
-# # Compute the global error 
-
-# position_list::Vector{Float64} = []
-# solution_list::Vector{Float64} = []
-# depth_list::Vector{Int64} = []
-
-# output!(base_level.grid_list[1], 1, position_list, solution_list, depth_list)
-
-# err_glob::Float64 = 0.0
-
-# for ind in eachindex(position_list)
-#     global err_glob
-#     err_glob += (dx / 2.0^(depth_list[ind] - 1)) * (solution_list[ind] - exact_solution(base_level.grid_list[1].t, position_list[ind]))^2
-# end
-
-
-
-
-# println("n_points: ", n_points, ", n_level: ", maximum(depth_list),  ", global error: ", sqrt(err_glob))
-
-
-
-
-
+savefig(fig, file_out)
 
 
 
