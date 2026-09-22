@@ -1,0 +1,214 @@
+\documentclass[12pt]{article}
+
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage[french]{babel}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\sisetup{exponent-product = \cdot, output-product = \cdot}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{systeme}
+\usepackage{caption}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,      % Couleur des liens internes (sections, etc.)
+    urlcolor=magenta,    % Couleur des liens vers le Web
+    citecolor=green      % Couleur des citations bibliographiques
+}
+\usepackage{subcaption}
+\usepackage{lipsum}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+\usepackage{amssymb}
+\def\nbR{\ensuremath{\mathrm{I\! R}}}
+% Définition d'une couleur bleue pour les liens
+\definecolor{bleu}{RGB}{0,0,150}
+\hypersetup{
+    colorlinks=true,
+    allcolors=blue
+}
+\usepackage[
+backend=biber,
+style=authoryear,
+]{biblatex}
+\addbibresource{references.bib}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,decorations.pathreplacing}
+\usepackage{enumitem}
+\setlist[itemize,1]{label=\textbullet}
+
+% DEBUT DU DOCUMENT 
+
+\begin{document}
+
+% Page titre
+\begin{titlepage}
+    
+    \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+    \centering
+
+    % EN-TÊTE
+
+    \textsc{\LARGE ENSEIRB-MATMECA}\\[1.5cm]
+    \textsc{\large Parcours Mathématiques et Mécanique}\\[0.5cm]
+
+    % TITRE
+
+    \HRule \\[0.4cm]
+    { \huge \bfseries Étude et implémentation du raffinement adaptatif de maillage h-adaptatif pour la simulation d'écoulements multiphasiques en une dimension.}\\[0.4cm]
+    \HRule \\[1.5cm]
+
+    % AUTEURS ET PROFESSEURS
+
+    \begin{minipage}{0.4\textwidth}
+    \begin{flushleft} \large
+    \emph{Auteurs :}\\
+    \textsc{KNEPFLER Yann }
+    \end{flushleft}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.4\textwidth}
+    \begin{flushright} \large
+    \emph{Professeur référent :}\\
+    N. \textsc{Barral}
+    \end{flushright}
+    \end{minipage}\\[2cm]
+
+    % DATE
+
+    {\large 24 septembre 2026}\\[2cm]
+
+    % LOGO
+
+    \includegraphics[width=0.8\textwidth]{Figures/logo_enseirb-matmeca-min.png}
+
+    \vfill
+
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+
+
+\section*{Introduction}
+
+Pour le forage pétrolier offshore au delà des couches salines, le réseau de tuyaux utilisé pour faire parvenir le pétrole à la surface rencontre de nombreuses difficultés; dépôts de sédiments, de sels, de cire, qui empêchent le bon fonctionnement du forage pétrolier.
+
+Pour pouvoir prévenir ces problèmes il faut pouvoir déterminer les caractéristique de l'écoulement dans ce réseau de tuyaux et étant donné la taille de ces réseaux de tuyaux les coûts de simulation sont une problématique majeure.
+C'est pourquoi il est intéressant de développer une méthode en dimension 1 pour évaluer les caractéristiques de l'écoulement.
+
+C'est dans ce cadre que l'équipe du laboratoire Litpeg cherche à développer une méthode à une dimension de haut ordre. Cependant les méthodes de haut ordre peuvent perdre la conservation de la monotonie dans le cas d'une solution discontinue. Ainsi il est pertinent de chercher à utiliser une schéma d'ordre 1 et de raffiner le maillage autour des discontinuités de la solution.
+
+\section{Modèle physique }
+\subsection{Description du modèle}
+Le modèle utiliser est un modèle à quatre équations d'écoulement diphasique compressible et isotherme en dimension 1. Dans ce modèle on considère que la pression au sein des deux fluides est égale. Ce modèle est une adaptation de celui décrit dans \cite{Wang15}.
+
+\subsection{Formulation mathématiques}
+
+L'équation de continuité du fluide \(k\), où \(k = 1,2\), est
+\begin{equation}
+     \frac{\partial( \alpha _k \rho _k)}{\partial t}  + \frac{\partial (\alpha _k \rho _k u_k) }{\partial x} = 0
+     \label{continuity}
+\end{equation}
+où \(\alpha_k\) est le fraction volumique du fluide \(k\), \(\rho _k\) est la masse volumique du fluide \(k\) et \(u_k\) la vitesse du fluide \(k\) dans la direction du tuyau.\\
+
+L'équation de quantité de mouvement du fluide \(k\) est 
+\begin{equation}
+    \frac{\partial (\alpha _k \rho _k u_k)}{\partial t} + \frac{\partial (\alpha _k \rho _k u_k^2)}{\partial x} = - \alpha _k \frac{\partial p _k}{\partial x} - (p_k - p_k^i) \frac{\partial \alpha _k}{\partial x} + \alpha _k \rho _k sin(\theta) + \frac{4 \tau _{k, W}}{D_{H, k}} + \frac{\alpha \tau _i S _i}{A _k}
+    \label{momentum}
+\end{equation}
+où, \(p_k\) est la pression au sein du fluide \(k\), \(p_k^i\) est la pression a l'interface entre les deux fluides, \(\theta\) la pente du du tuyau, \(\tau _{k, W}\) la contrainte de cisaillement due à la paroi, \(D_{H, k}\) le diamètre hydraulique, \(\tau _i\) la contrainte de cisaillement due à l'interface entre les deux fluides, \(S_i\) le périmètre d'interface et \(A_k\) la surface occupée par le fluide \(k\) dans la section normale.
+
+Pour fermer ce système d'équation on a,
+\begin{equation}
+    \alpha_1 + \alpha_2 = 1
+    \label{closur}
+\end{equation}
+
+Pour assurer la stabilité une différence de pression \(\Delta p \) est introduite, décrit dans \cite{Wang15}.
+
+\section{Méthode numérique}
+\subsection{Discrétisation}
+
+La discrétisation se fait sur deux maillages décalés \ref{staggered_grid}, où sur le maillage primaire (en ligne continue) les variables scalaires sont définies et sur un maillage secondaire (en ligne pointillée) les variables vectorielles (vitesse) sont définies. Cette configuration de maillage décrite dans \cite{Patankar80}
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/schémas/staggered_grid.tex}
+    \caption{maillages décalés (adapté de \cite{Ruiz12})}
+    \label{staggered_grid}
+\end{figure}
+
+Cette configuration de maillage permet de prévenir les phénomènes de découpages pair/impair qui interviennent qu sien des algorithmes de corrections de la pression (\cite{Patankar80}).
+
+Avant la discrétisation des équations, les terme advectifs des équations de quantité de mouvement de chaque phase (\ref{momentum}) sont linéarisés pour faciliter la résolution numérique (\cite{Wang15}), et l'on soustrait l'équation de continuité multiplié par \(u_k\) pour les deux phases:
+\begin{equation}
+    (\alpha_k \rho_k) \frac{\partial u_k}{\partial t} + ( \alpha_k \rho_k u_k) \frac{\partial u_k}{\partial x} = - \alpha_k \frac{\partial p_k}{\partial x} - \Delta p \frac{\partial \alpha_k}{\partial x} + \alpha_k \rho_k g sin\theta + \frac{4 \tau_{k, W}}{ D_{H, k} } + \frac{\alpha_k \tau_i S_i}{A_k}
+    \label{befor_discretization}
+\end{equation}
+
+Après avoir discrétisé l'équation \ref{befor_discretization} sur le maillage secondaire on obtient à l'aide de la méthode des volumes finis on obtient le terme à gauche suivant:
+\begin{equation}
+    LHS = (\alpha_k \rho_k)_e^n \frac{u_{k,e}^{n+1} - u_{k, e}^{n} }{\Delta t} + (\alpha_k \rho_k u_k)_e^n \left( \frac{u_k}{\Delta x} \right)_e^n
+    \label{LHS}
+\end{equation}
+
+Dans le laboratoire plusieurs méthodes numériques sont implémenté, deux méthode classique, schéma upwind du premier ordre et le schéma monotone décentré en amont (schéma MUSCL), et un schéma de reconstruction de flux. Les variables scalaires \(\alpha_k\) et \(\rho_k\) sont évaluées sur le maillage secondaire par interpolation.
+
+Le second membre de l'équation (\ref{befor_discretization}) est discrétisé de la façon suivante, 
+\begin{equation}
+    RHS = - \alpha_{k, e}^n \frac{p_E^{n+1} - p_P^{n+1}}{\Delta x} - \Delta p _{k, e}^n \frac{\alpha_{k, E}^n - \alpha_{k, P}^n}{\Delta x} + (\alpha_k \rho_k)_e^ngsin\theta + \left( \frac{4 \tau_{k, W}}{D_{H, k}} \right)_e^n + \left( \frac{\alpha_k \tau_i S_i}{A_k} \right)_e^n
+    \label{RHS}
+\end{equation}
+
+Les équations de continuités sont discrétisées sur le maillage primaire:
+\begin{equation}
+    \frac{(\alpha_k \rho_k)_P^{n+1} - (\alpha_k \rho_k)_P^n}{\Delta t} + \left( \frac{\alpha_k \rho_k u_k}{\Delta x } \right)_P^n = 0
+\end{equation}
+
+\section{Méthode de raffinement de maillage adaptatif}
+
+La méthode de maillage adaptatif consiste à estimer les zones produisant le plus d'erreur, autour de forts gradients ou de discontinuités, et de raffiner le maillage autour de ces zones.
+En général, la méthode ne dépend pas du système d'équations à résoudre ni du schéma.
+\subsection{Configuration du maillage }
+\subsubsection{Structure de maillages imbriqués}
+
+Pour le raffinement de maillage adaptatif on utilise une suite de maillage uniformes imbriqués (\cite{Berger_Collela98}). On note les niveaux de raffinements \( l = 1, ..., l_{max} \), où le niveau \(1\) est le plus grossier, et on définit, 
+\begin{equation}
+    G_l = \bigcup_k G_{l, k}.
+\end{equation}
+
+On a alors un unique maillage au niveau \( l = 1 \) et ce maillage recouvre entièrement le domaine. Pour chaque niveau de maillage on définit \( h_l \) la largeur des mailles au sein des maillages au niveau \( l \). On définit également un ratio de raffinement de la façon suivante \( r = \frac{h_{l-1}}{h_l} \), ce ratio est un entier et ici on choisit \( r = 2 \).
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/schémas/nested_grid.tex}
+    \caption{Structure de maillages imbriqués}
+    \label{nested_grid}
+\end{figure}
+
+Pour assurer la bonne imbrication des maillages entre eux il faut que, 
+\begin{itemize}
+    \item Un maillage au niveau \(l\) doit commencer et se finir au coin d'une maille du même maillage au niveau \(l-1\).
+    \item Un maillage au niveau \(l-1\) doit séparer un maillage au niveau \(l\) et un maillage au niveau \(l-2\)
+    \item Une maille au niveau \(l\) peut uniquement avoir des mailles voisines au niveau \(l, \; l-1, \; \text{ou} \; l+1\)
+\end{itemize}
+
+\subsubsection{Avancement de la structure de maillages imbriqués}
+Pour pouvoir avancer un maillage d'un pas de temps il faut lui assigner des condition de bord. Pour cela on définit des mailles fantômes aux bords des maillages.
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/schémas/ghost_cells.tex}    
+\end{figure}
+
+\newpage
+\printbibliography
+\end{document}

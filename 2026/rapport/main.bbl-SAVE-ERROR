@@ -1,0 +1,170 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{Berger_Collela98}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=00b1a7d674f6b696681df62ee4078dc7}{%
+           family={Berger},
+           familyi={B\bibinitperiod},
+           given={M.\bibnamedelimi J.},
+           giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1ef696ce0ccae304b3191edb2f2558d9}{%
+           family={Collela},
+           familyi={C\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{1590f3e762d561763f6305c767096a11}
+      \strng{fullhash}{1590f3e762d561763f6305c767096a11}
+      \strng{fullhashraw}{1590f3e762d561763f6305c767096a11}
+      \strng{bibnamehash}{1590f3e762d561763f6305c767096a11}
+      \strng{authorbibnamehash}{1590f3e762d561763f6305c767096a11}
+      \strng{authornamehash}{1590f3e762d561763f6305c767096a11}
+      \strng{authorfullhash}{1590f3e762d561763f6305c767096a11}
+      \strng{authorfullhashraw}{1590f3e762d561763f6305c767096a11}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Computational Physics}
+      \field{title}{local Adaptive Mesh Refinement for Shock Hydrodynamics}
+      \field{year}{1998}
+    \endentry
+    \entry{Ruiz12}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=72e8a101aa828afb074eb07b33daa70d}{%
+           family={Morales-Ruiz},
+           familyi={M\bibinithyphendelim R\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=78fc58abae97f6bbbcc04a29b0a6155b}{%
+           family={Rigola},
+           familyi={R\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=81166a52168835d516d2fc4dd6716ffc}{%
+           family={Rodriguez},
+           familyi={R\bibinitperiod},
+           given={I.},
+           giveni={I\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6e69ab9b15526ec3b17ba3450544f407}{%
+           family={Olivia},
+           familyi={O\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{7c12f4f46830421ff1f90956d31f6ec2}
+      \strng{fullhash}{e233f4fde71235e5ab2658e11632100a}
+      \strng{fullhashraw}{e233f4fde71235e5ab2658e11632100a}
+      \strng{bibnamehash}{7c12f4f46830421ff1f90956d31f6ec2}
+      \strng{authorbibnamehash}{7c12f4f46830421ff1f90956d31f6ec2}
+      \strng{authornamehash}{7c12f4f46830421ff1f90956d31f6ec2}
+      \strng{authorfullhash}{e233f4fde71235e5ab2658e11632100a}
+      \strng{authorfullhashraw}{e233f4fde71235e5ab2658e11632100a}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{International Journal of Multiphase Flow}
+      \field{note}{\href{https://www.sciencedirect.com/science/article/pii/S0301932212000468}{Morales-Ruiz et al (2012)}}
+      \field{title}{Numerical resolution of the liquid vapour two phase flow by means of the two fluid model and a pressure based method}
+      \field{year}{2012}
+    \endentry
+    \entry{Patankar80}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=8b73b1b4fd58cdca448247bdb8c0982a}{%
+           family={Patankar},
+           familyi={P\bibinitperiod},
+           given={S.\bibnamedelimi V.},
+           giveni={S\bibinitperiod\bibinitdelim V\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{8b73b1b4fd58cdca448247bdb8c0982a}
+      \strng{fullhash}{8b73b1b4fd58cdca448247bdb8c0982a}
+      \strng{fullhashraw}{8b73b1b4fd58cdca448247bdb8c0982a}
+      \strng{bibnamehash}{8b73b1b4fd58cdca448247bdb8c0982a}
+      \strng{authorbibnamehash}{8b73b1b4fd58cdca448247bdb8c0982a}
+      \strng{authornamehash}{8b73b1b4fd58cdca448247bdb8c0982a}
+      \strng{authorfullhash}{8b73b1b4fd58cdca448247bdb8c0982a}
+      \strng{authorfullhashraw}{8b73b1b4fd58cdca448247bdb8c0982a}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Numerical heat transfer and fluid flow.}
+      \field{year}{1980}
+    \endentry
+    \entry{Wang15}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=cc4aadc875d7abdbaf96dfa4a83d8b77}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Z.},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=138bcbbb2a32d7e0c5f21688b8d2c9f6}{%
+           family={Gong},
+           familyi={G\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a86e97589af4ebc957e84399c0ba5a1c}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={C.},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{d23ec930cb8b598cce2e8efbf173c970}
+      \strng{fullhash}{d23ec930cb8b598cce2e8efbf173c970}
+      \strng{fullhashraw}{d23ec930cb8b598cce2e8efbf173c970}
+      \strng{bibnamehash}{d23ec930cb8b598cce2e8efbf173c970}
+      \strng{authorbibnamehash}{d23ec930cb8b598cce2e8efbf173c970}
+      \strng{authornamehash}{d23ec930cb8b598cce2e8efbf173c970}
+      \strng{authorfullhash}{d23ec930cb8b598cce2e8efbf173c970}
+      \strng{authorfullhashraw}{d23ec930cb8b598cce2e8efbf173c970}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Numerical Heat Transfer; Part A: Application}
+      \field{note}{\href{https://www.tandfonline.com/doi/full/10.1080/10407782.2014.986383}{Wang et al (2015)}}
+      \field{title}{Numerical Simulation of One-Dimensional Two- Phase Flow Using a Pressure-Based Algorithm}
+      \field{year}{2015}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
