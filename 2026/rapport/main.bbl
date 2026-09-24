@@ -126,6 +126,37 @@
       \field{pages}{2298\bibrangedash 2316}
       \range{pages}{19}
     \endentry
+    \entry{Harten83}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=2b63438904574a967c62c6f652673c40}{%
+           family={Harten},
+           familyi={H\bibinitperiod},
+           given={Ami},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{2b63438904574a967c62c6f652673c40}
+      \strng{fullhash}{2b63438904574a967c62c6f652673c40}
+      \strng{fullhashraw}{2b63438904574a967c62c6f652673c40}
+      \strng{bibnamehash}{2b63438904574a967c62c6f652673c40}
+      \strng{authorbibnamehash}{2b63438904574a967c62c6f652673c40}
+      \strng{authornamehash}{2b63438904574a967c62c6f652673c40}
+      \strng{authorfullhash}{2b63438904574a967c62c6f652673c40}
+      \strng{authorfullhashraw}{2b63438904574a967c62c6f652673c40}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Computational Physics}
+      \field{number}{3}
+      \field{title}{High resolution schemes for hyperbolic conservation laws}
+      \field{volume}{49}
+      \field{year}{1983}
+      \field{pages}{357\bibrangedash 393}
+      \range{pages}{37}
+    \endentry
     \entry{Hawke18}{software}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=632060af53ab549a5c75345cf5add82e}{%
@@ -212,21 +243,21 @@
            given={I.},
            giveni={I\bibinitperiod},
            givenun=0}}%
-        {{un=0,uniquepart=base,hash=6e69ab9b15526ec3b17ba3450544f407}{%
-           family={Olivia},
+        {{un=0,uniquepart=base,hash=038fabca136d062362da77986396d9c3}{%
+           family={Oliva},
            familyi={O\bibinitperiod},
            given={A.},
            giveni={A\bibinitperiod},
            givenun=0}}%
       }
       \strng{namehash}{7c12f4f46830421ff1f90956d31f6ec2}
-      \strng{fullhash}{e233f4fde71235e5ab2658e11632100a}
-      \strng{fullhashraw}{e233f4fde71235e5ab2658e11632100a}
+      \strng{fullhash}{ba5c68be42f098313d107d341be38755}
+      \strng{fullhashraw}{ba5c68be42f098313d107d341be38755}
       \strng{bibnamehash}{7c12f4f46830421ff1f90956d31f6ec2}
       \strng{authorbibnamehash}{7c12f4f46830421ff1f90956d31f6ec2}
       \strng{authornamehash}{7c12f4f46830421ff1f90956d31f6ec2}
-      \strng{authorfullhash}{e233f4fde71235e5ab2658e11632100a}
-      \strng{authorfullhashraw}{e233f4fde71235e5ab2658e11632100a}
+      \strng{authorfullhash}{ba5c68be42f098313d107d341be38755}
+      \strng{authorfullhashraw}{ba5c68be42f098313d107d341be38755}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{extradatescope}{labelyear}
@@ -234,9 +265,11 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{International Journal of Multiphase Flow}
-      \field{note}{\href{https://www.sciencedirect.com/science/article/pii/S0301932212000468}{Morales-Ruiz et al (2012)}}
-      \field{title}{Numerical resolution of the liquid vapour two phase flow by means of the two fluid model and a pressure based method}
+      \field{title}{Numerical resolution of the liquid-vapour two-phase flow by means of the two-fluid model and a pressure based method}
+      \field{volume}{43}
       \field{year}{2012}
+      \field{pages}{118\bibrangedash 130}
+      \range{pages}{13}
     \endentry
     \entry{Patankar80}{book}{}{}
       \name{author}{1}{}{%

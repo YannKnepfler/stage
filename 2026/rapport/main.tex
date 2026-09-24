@@ -45,6 +45,7 @@ style=authoryear,
 \usepackage{enumitem}
 \setlist[itemize,1]{label=\textbullet}
 
+
 % DEBUT DU DOCUMENT 
 
 \begin{document}
@@ -77,6 +78,9 @@ style=authoryear,
     \hfill
     \begin{minipage}{0.4\textwidth}
     \begin{flushright} \large
+
+    \emph{Maître de stage :}\\
+    D. .\textsc{de Carvalho}
     \emph{Professeur référent :}\\
     N. \textsc{Barral}
     \end{flushright}
@@ -94,6 +98,15 @@ style=authoryear,
 
 \end{titlepage}
 
+\section*{Résumé}
+Dans ce rapport est décrit dans un premier temps l'équation et les méthodes de dsicrétisatiom employés au sein du laboratoire.
+Grâce à cela on mesure la pertinence de la méthode de raffinement de maillage adaptatif pour ces problèmes. 
+Par la suite, la méthode de maillage adaptatif est introduite et expliquée.
+L'explication se fait à travers la structure de maillage utilisée, la façcon d'utiliser ce type de structure et la méthode pour modifier le maillage pour obtenir le raffinement voulu.
+Pour avoir une idée plus claire de la manipulation de ces structures, l'implémentation de la méthode est décrite pour expliauer les structures de données utilisées et certains algorithme pour comprendres la place du jeu de paramètre introduit.
+Enfin cette méthode est testée sur un cas simple pour mettre en évidence les problèmes rencontrés.
+
+
 \tableofcontents
 \newpage
 
@@ -101,12 +114,11 @@ style=authoryear,
 
 \section*{Introduction}
 
-Pour le forage pétrolier offshore au delà des couches salines, le réseau de tuyaux utilisé pour faire parvenir le pétrole à la surface rencontre de nombreuses difficultés; dépôts de sédiments, de sels, de cire, qui empêchent le bon fonctionnement du forage pétrolier.
-
-Pour pouvoir prévenir ces problèmes il faut pouvoir déterminer les caractéristique de l'écoulement dans ce réseau de tuyaux et étant donné la taille de ces réseaux de tuyaux les coûts de simulation sont une problématique majeure.
-C'est pourquoi il est intéressant de développer une méthode en dimension 1 pour évaluer les caractéristiques de l'écoulement.
-
-C'est dans ce cadre que l'équipe du laboratoire Litpeg cherche à développer une méthode à une dimension de haut ordre. Cependant les méthodes de haut ordre peuvent perdre la conservation de la monotonie dans le cas d'une solution discontinue. Ainsi il est pertinent de chercher à utiliser une schéma d'ordre 1 et de raffiner le maillage autour des discontinuités de la solution.
+Pour pouvoir acheminer efficacement le pétrole du forage sous-marin jusqu'à la plateforme pétrolière if faut pouvoir déterminer de nombreux paramètres clefs de l'écoulement diphasique qu sein du réseau de tuyau, comme la pressioon, la vitesse des phases, ou les fractions volumique. 
+Étant donné la taille des réseaux de tuyaux, les schémas numériques implémentés sont des schémas à une dimension. 
+Le laboratoire dans leauel j'ai réalisé mon stage cherche à implémenter des méthode de haut ordre de convergence pour obtenir des simulations plus précises.
+Cependant les schémas de haut ordre ne sont pas viable si la solution admet des discontinuités, ainsi l'ordre des méthodes est réduit autour des discontinuités.
+Il semble alors pertinent de raffiner le maillage autour de ces discontinuités et comme ces dernières se propage au sein de l'écoulement il semble judicieu d'utiliser une méthode de raffinement de maillage daptatif. 
 
 \section{Modèle physique }
 \subsection{Description du modèle}
@@ -138,6 +150,8 @@ Pour fermer ce système d'équation on a,
 \end{equation}
 
 Pour assurer la stabilité une différence de pression \(\Delta p \) est introduite (\cite{Wang15}).
+
+
 
 \section{Méthode numérique}
 \subsection{Discrétisation}
@@ -181,13 +195,26 @@ Les équations de continuités sont discrétisées sur le maillage primaire:
     \frac{(\alpha_k \rho_k)_P^{n+1} - (\alpha_k \rho_k)_P^n}{\Delta t} + \left( \frac{\alpha_k \rho_k u_k}{\Delta x } \right)_P^n = 0
 \end{equation}
 
+\subsection{Exemple de cas test}
+\label{section: Exemple_cas_test}
+Les schémas implémentés sont testés sur le problème classique du robinet (\cite{Harten83}): dans un tuyau vertical, rempli d'eau et d'air, de l'eau est injecté par le dessus du tuyau. L'écoulement de l'eau est ensuite accélérer à cause de la gravité et d'un gradient de pression et de l'air rentre par le bas du tuyau.
+La figure (\ref{cas_test}) montre que pour ce cas test il y a une discontinuité se propageant en fonction du temps. Étant donné aue le théorème de la barrière de Godunov assure aue seule un schéma d'ordre 1 peut conserver la monotonie si la solution admet des discontinuités, les schémas implémentés varient localement en ordre autour de ces discontinuité.
+C'est pourquoi il serait pertinent de raffiner le maillage autour de ces mêmes zones autour des dicontinuité pour augmenter la précsion des schémas.
+
+\begin{figure}[htbp]
+    \centering 
+    \includegraphics[width=0.6\textwidth]{figures/cas_test.png}
+    \caption{Schéma du problème du robinet (adapté de \cite{Ruiz12})}
+    \label{cas_test}
+\end{figure}
+
 \section{Méthode de raffinement de maillage adaptatif}
 
 La méthode de maillage adaptatif consiste à estimer les zones produisant le plus d'erreur, autour de forts gradients ou de discontinuités, et de raffiner le maillage autour de ces zones.
 En général, la méthode ne dépend pas du système d'équations à résoudre ni du schéma.
 \subsection{Configuration du maillage }
 \subsubsection{Structure de maillages imbriqués}
-\label{section:3.1.1}
+\label{section: structure de maillage imbriqués}
 
 Pour le raffinement de maillage adaptatif on utilise une suite de maillage uniformes imbriqués (\cite{Berger_Collela98}). On note les niveaux de raffinements \( l = 1, ..., l_{max} \), où le niveau \(1\) est le plus grossier, et on définit, 
 \begin{equation}
@@ -327,7 +354,7 @@ En effet, la diffusion numérique lisse les solutions et ainsi plus l'équation 
 \end{algorithm}
 
 Pour empêcher la destruction d'un maillage fille qui possède lui même des maillages filles, dans l'algorithme \ref{compute_error} on force le raffinement dans ce cas en donnant une estimation d'erreur virtuel haute.
-Grâce à cela et les zones de raffinement plus large, la bonne imbriquation défini dans la section \ref{section:3.1.1} est assurée.
+Grâce à cela et les zones de raffinement plus large, la bonne imbriquation défini dans la section \ref{section: structure de maillage imbriqués} est assurée.
 
 \begin{algorithm}
     \caption{Estimateur d'erreur}
@@ -337,7 +364,7 @@ Grâce à cela et les zones de raffinement plus large, la bonne imbriquation dé
 
 \section{Application}
 \subsection{Configuration}
-
+\label{section: configuration}
 La méthode implémentée est testée sur l'équation d'advection en 1 dimension pour plusieurs conditions initiales,
 
 \begin{equation}
@@ -380,6 +407,7 @@ Sur cette figure, l'axe des abscisses représente la taille des mailles du maill
 \end{figure}
 
 \subsection{Analyse}
+\label{section: analyse}
 La méthode est également testé sur les trois conditions initiales en mesurant l'erreur globale pour différent nombres maximum de niveaux de raffinement, \(l_{max}\).
 Ici le nombre de mailles du maillage le plus grossier est fixé à 64, et le jeu de paramètre est (\cite{Löhner86}),
 
@@ -391,9 +419,14 @@ Ici le nombre de mailles du maillage le plus grossier est fixé à 64, et le jeu
     \item coefficient cfl: 0.5
 \end{itemize} 
 
-Sur le tableau \ref{tableau}, 
+Pour respecter la condition cfl sur tout les niveaux, le pas de temps choisi est le pas de temps du niveau le plus fin. Puisque le schéma d'Euler explicite admet une forte diffusion numérique, en augmentant le nombre de niveaux l'effet de la diffusion numérique sur les maillages les plus grossiers est amlifié.
+C'est pourquoi il y a peu de différence en terme d'erreur globale lorsqu'on augmente \(l_{max}\) sur le tableau \ref{tableau}.
+De plus pour ce jeu de paramètre, l'erreur globale pour \(l_{max} = 3\) et \(l_{max} = 4\) est égale pour la condition initiale de la gausssienne. Ceci est attendu puisque pour \(l_{max} = 4\) il y a seulement 3 niveaux de raffinement.
+Ainsi la solution est assez précise avec 3 niveaux de raffinements pour que les tolérance ne soient pas atteintes par l'estimateur d'erreur. Alors l'estimateur d'erreur fonctionne détecte plus facilement les forts gradients des solutions discontinues, ce qui est le but rechercher d'aprés lasection \ref{section: Exemple_cas_test}. 
 
-\begin{center}
+
+
+\begin{table}[htbp]
     \begin{tabular}{|c|c|c|c|}
         \hline
         \(l_{max}\) / condition initiale & Gaussienne & Créneau & Signal rectangle \\
@@ -405,8 +438,22 @@ Sur le tableau \ref{tableau},
         
         \hline        
     \end{tabular}
+    \caption{Erreur globale en fonction de \(l_{max}\) et de la condition initiale}
     \label{tableau}
-\end{center}
+\end{table}
+
+\section{Conclusion}
+
+Durant ce stage, le modèle physique et les schémas numériques utilisé par le laboratoire ont été étudiés pour pouvoir se rendre compte des enjeux du raffinement de maillage adaptatif liés à ce problème.
+Ensuite  la méthode de maillage adaptatif a été étudier, puis testé sur un cas simple.
+Pour le moment, on ne peut pas conclure de l'efficacité de la methode de raffinement de maillage adatatif présenté ici appliquer qu probl`me du laboratoir.
+Cependant le choix de l'estimateur d'erreur de Löhner semble être correct, étant donné sa capacité à localiser les discontinuité.\\
+
+\textbf{Perspectives d'amélioration}
+
+Pour finaliser l'étude de la méthode implémenter, il faudrait la tester sur un schéma implicite et sur de différents estimateur d'erreur, pour assurer le caractère adaptable.
+Pour améliorer la méthode et éviter de trop fortes diffusions numériques, il faudrait que chaque niveau de raffinement ait son propre pas de temps, et respecte la condition cfl à son niveau.
+
 
 
 
