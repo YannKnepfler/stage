@@ -1,0 +1,8 @@
+\begin{algorithmic}
+    \STATE \textbf{Data:} niveau \(G_l\), largeur de la zone tampon \texttt{buffer\_width}, tolérance de raffinement \texttt{ref\_tol}, tolérance de grossissement \texttt{coars\_tol} 
+    \STATE Appliquer l'estimateur d'erreur à l'ensemble des mailles de \(G_l\)
+    \STATE Maquer les mailles pour le raffinement à une distance de \texttt{buffer\_width} des mailles dont l'estimation d'erreur dépasse \texttt{ref\_tol} et des mailles précédement raffinées dont l'estimation d'erreur dépasse \texttt{coars\_tol}.
+    \STATE Créer et prolonger de nouveaux maillages filles la où les mailles ont été marqués pour le raffinement
+    \STATE Copier les valeurs des anciens maillages filles sur les nouveaux
+    \STATE Associer les maillages du niveau \(G_{l+1}\) aux maillages \(G_{l+2}\)
+\end{algorithmic}

@@ -21,12 +21,12 @@
   \datalist[entry]{nyt/global//global/global/global}
     \entry{Berger_Collela98}{article}{}{}
       \name{author}{2}{}{%
-        {{un=0,uniquepart=base,hash=00b1a7d674f6b696681df62ee4078dc7}{%
+        {{un=2,uniquepart=given,hash=00b1a7d674f6b696681df62ee4078dc7}{%
            family={Berger},
            familyi={B\bibinitperiod},
            given={M.\bibnamedelimi J.},
            giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod},
-           givenun=0}}%
+           givenun=2}}%
         {{un=0,uniquepart=base,hash=1ef696ce0ccae304b3191edb2f2558d9}{%
            family={Collela},
            familyi={C\bibinitperiod},
@@ -51,6 +51,146 @@
       \field{journaltitle}{Journal of Computational Physics}
       \field{title}{local Adaptive Mesh Refinement for Shock Hydrodynamics}
       \field{year}{1998}
+    \endentry
+    \entry{Berger_Oliger84}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=2,uniquepart=given,hash=e9fa0880d7695c7bf3335d37a6080c0f}{%
+           family={Berger},
+           familyi={B\bibinitperiod},
+           given={Marsha\bibnamedelima J},
+           giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=2}}%
+        {{un=0,uniquepart=base,hash=f6909ad190c6609ec1d6859c6f8058c8}{%
+           family={Oliger},
+           familyi={O\bibinitperiod},
+           given={Joseph},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{daaa8d2991e59b45f2f319ae85a4f8d3}
+      \strng{fullhash}{daaa8d2991e59b45f2f319ae85a4f8d3}
+      \strng{fullhashraw}{daaa8d2991e59b45f2f319ae85a4f8d3}
+      \strng{bibnamehash}{daaa8d2991e59b45f2f319ae85a4f8d3}
+      \strng{authorbibnamehash}{daaa8d2991e59b45f2f319ae85a4f8d3}
+      \strng{authornamehash}{daaa8d2991e59b45f2f319ae85a4f8d3}
+      \strng{authorfullhash}{daaa8d2991e59b45f2f319ae85a4f8d3}
+      \strng{authorfullhashraw}{daaa8d2991e59b45f2f319ae85a4f8d3}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Computational Physics}
+      \field{number}{3}
+      \field{title}{Adaptive mesh refinement for hyperbolic partial differential equations}
+      \field{volume}{53}
+      \field{year}{1984}
+      \field{pages}{484\bibrangedash 512}
+      \range{pages}{29}
+    \endentry
+    \entry{Berger_Leveque98}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=2,uniquepart=given,hash=e9fa0880d7695c7bf3335d37a6080c0f}{%
+           family={Berger},
+           familyi={B\bibinitperiod},
+           given={Marsha\bibnamedelima J.},
+           giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=2}}%
+        {{un=0,uniquepart=base,hash=c5fc096f540a44e56f892cc83176f0fb}{%
+           family={LeVeque},
+           familyi={L\bibinitperiod},
+           given={Randall\bibnamedelima J.},
+           giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{2e28c168d85775d5ddaf615c42c0a3fc}
+      \strng{fullhash}{2e28c168d85775d5ddaf615c42c0a3fc}
+      \strng{fullhashraw}{2e28c168d85775d5ddaf615c42c0a3fc}
+      \strng{bibnamehash}{2e28c168d85775d5ddaf615c42c0a3fc}
+      \strng{authorbibnamehash}{2e28c168d85775d5ddaf615c42c0a3fc}
+      \strng{authornamehash}{2e28c168d85775d5ddaf615c42c0a3fc}
+      \strng{authorfullhash}{2e28c168d85775d5ddaf615c42c0a3fc}
+      \strng{authorfullhashraw}{2e28c168d85775d5ddaf615c42c0a3fc}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{SIAM Journal on Numerical Analysis}
+      \field{number}{6}
+      \field{title}{Adaptive Mesh Refinement Using Wave-Propagation Algorithms for Hyperbolic Systems}
+      \field{volume}{35}
+      \field{year}{1998}
+      \field{pages}{2298\bibrangedash 2316}
+      \range{pages}{19}
+    \endentry
+    \entry{Hawke18}{software}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=632060af53ab549a5c75345cf5add82e}{%
+           family={Hawke},
+           familyi={H\bibinitperiod},
+           given={Ian},
+           giveni={I\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Southhampton, UK}%
+      }
+      \strng{namehash}{632060af53ab549a5c75345cf5add82e}
+      \strng{fullhash}{632060af53ab549a5c75345cf5add82e}
+      \strng{fullhashraw}{632060af53ab549a5c75345cf5add82e}
+      \strng{bibnamehash}{632060af53ab549a5c75345cf5add82e}
+      \strng{authorbibnamehash}{632060af53ab549a5c75345cf5add82e}
+      \strng{authornamehash}{632060af53ab549a5c75345cf5add82e}
+      \strng{authorfullhash}{632060af53ab549a5c75345cf5add82e}
+      \strng{authorfullhashraw}{632060af53ab549a5c75345cf5add82e}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{amr1d}
+      \field{year}{2018}
+      \verb{urlraw}
+      \verb https://github.com/IanHawke/amr1d
+      \endverb
+      \verb{url}
+      \verb https://github.com/IanHawke/amr1d
+      \endverb
+    \endentry
+    \entry{Löhner86}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=ba017737cf79cdb8961787e0b760fc8d}{%
+           family={Löhner},
+           familyi={L\bibinitperiod},
+           given={Rainald},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ba017737cf79cdb8961787e0b760fc8d}
+      \strng{fullhash}{ba017737cf79cdb8961787e0b760fc8d}
+      \strng{fullhashraw}{ba017737cf79cdb8961787e0b760fc8d}
+      \strng{bibnamehash}{ba017737cf79cdb8961787e0b760fc8d}
+      \strng{authorbibnamehash}{ba017737cf79cdb8961787e0b760fc8d}
+      \strng{authornamehash}{ba017737cf79cdb8961787e0b760fc8d}
+      \strng{authorfullhash}{ba017737cf79cdb8961787e0b760fc8d}
+      \strng{authorfullhashraw}{ba017737cf79cdb8961787e0b760fc8d}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computer Methods in Applied Mechanics and Engineering}
+      \field{number}{3}
+      \field{title}{An adaptive finite element scheme for transient problems in CFD}
+      \field{volume}{61}
+      \field{year}{1987}
+      \field{pages}{323\bibrangedash 338}
+      \range{pages}{16}
     \endentry
     \entry{Ruiz12}{article}{}{}
       \name{author}{4}{}{%

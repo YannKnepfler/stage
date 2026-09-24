@@ -558,7 +558,7 @@ function restrict_grid!(child::Grid)
         new_flux = compute_flux(child.u_p, child.box.inside_ind[1])
 
         # Correct the parent grid 
-        child.parent.u[parent_i] += child.parent.dt
+        child.parent.u[parent_i] += child.parent.dt * (new_flux - old_flux) / child.parent.dx
     end
     
     # Right boundary

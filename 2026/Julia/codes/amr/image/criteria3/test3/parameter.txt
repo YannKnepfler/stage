@@ -1,5 +1,0 @@
-amr parameter: 0.001
-amr buff width: 4
-max_depth : 3
-cfl : 1.0
-n_points : 64

@@ -20,7 +20,6 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Formulation mathématiques}{2}{subsection.1.2}\protected@file@percent }
 \newlabel{continuity}{{1}{2}{Formulation mathématiques}{equation.1}{}}
 \newlabel{momentum}{{2}{2}{Formulation mathématiques}{equation.2}{}}
-\newlabel{closur}{{3}{2}{Formulation mathématiques}{equation.3}{}}
 \abx@aux@cite{0}{Patankar80}
 \abx@aux@segm{0}{0}{Patankar80}
 \abx@aux@cite{0}{Ruiz12}
@@ -31,6 +30,7 @@
 \abx@aux@segm{0}{0}{Patankar80}
 \abx@aux@cite{0}{Wang15}
 \abx@aux@segm{0}{0}{Wang15}
+\newlabel{closur}{{3}{3}{Formulation mathématiques}{equation.3}{}}
 \abx@aux@page{2}{3}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Méthode numérique}{3}{section.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Discrétisation}{3}{subsection.2.1}\protected@file@percent }
@@ -42,23 +42,80 @@
 \abx@aux@page{7}{3}
 \newlabel{befor_discretization}{{4}{3}{Discrétisation}{equation.4}{}}
 \newlabel{LHS}{{5}{3}{Discrétisation}{equation.5}{}}
-\newlabel{RHS}{{6}{3}{Discrétisation}{equation.6}{}}
 \abx@aux@cite{0}{Berger_Collela98}
 \abx@aux@segm{0}{0}{Berger_Collela98}
+\abx@aux@cite{0}{Berger_Collela98}
+\abx@aux@segm{0}{0}{Berger_Collela98}
+\newlabel{RHS}{{6}{4}{Discrétisation}{equation.6}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Méthode de raffinement de maillage adaptatif}{4}{section.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Configuration du maillage }{4}{subsection.3.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}Structure de maillages imbriqués}{4}{subsubsection.3.1.1}\protected@file@percent }
+\newlabel{section:3.1.1}{{3.1.1}{4}{Structure de maillages imbriqués}{subsubsection.3.1.1}{}}
 \abx@aux@page{8}{4}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Structure de maillages imbriqués}}{4}{figure.caption.4}\protected@file@percent }
-\newlabel{nested_grid}{{2}{4}{Structure de maillages imbriqués}{figure.caption.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.2}Avancement de la structure de maillages imbriqués}{5}{subsubsection.3.1.2}\protected@file@percent }
-\abx@aux@page{9}{6}
-\abx@aux@page{10}{6}
+\abx@aux@cite{0}{Berger_Leveque98}
+\abx@aux@segm{0}{0}{Berger_Leveque98}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Structure de maillages imbriqués}}{5}{figure.caption.4}\protected@file@percent }
+\newlabel{nested_grid}{{2}{5}{Structure de maillages imbriqués}{figure.caption.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.2}Définition des conditions de bords}{5}{subsubsection.3.1.2}\protected@file@percent }
+\abx@aux@page{9}{5}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Maillage avec mailles fantômes pour 2 mailles fantômes de chaque côté}}{5}{figure.caption.5}\protected@file@percent }
+\newlabel{ghost_cells}{{3}{5}{Maillage avec mailles fantômes pour 2 mailles fantômes de chaque côté}{figure.caption.5}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.3}Corretions des maillages grossiers}{5}{subsubsection.3.1.3}\protected@file@percent }
+\abx@aux@page{10}{5}
+\abx@aux@cite{0}{Berger_Oliger84}
+\abx@aux@segm{0}{0}{Berger_Oliger84}
+\abx@aux@cite{0}{Löhner86}
+\abx@aux@segm{0}{0}{Löhner86}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Correction des mailles raffinées}}{6}{figure.caption.6}\protected@file@percent }
+\newlabel{correction_overlapping}{{4}{6}{Correction des mailles raffinées}{figure.caption.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Raffinement de Maillage}{6}{subsection.3.2}\protected@file@percent }
 \abx@aux@page{11}{6}
-\abx@aux@page{12}{6}
-\abx@aux@read@bbl@mdfivesum{105CC7D57DC3AA99C27534A984455ABD}
+\abx@aux@cite{0}{Hawke18}
+\abx@aux@segm{0}{0}{Hawke18}
+\abx@aux@cite{0}{Löhner86}
+\abx@aux@segm{0}{0}{Löhner86}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Prolongation d'un maillage fille}}{7}{figure.caption.7}\protected@file@percent }
+\newlabel{grid_prolongation}{{5}{7}{Prolongation d'un maillage fille}{figure.caption.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Estimateur d'erreur}{7}{subsection.3.3}\protected@file@percent }
+\abx@aux@page{12}{7}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Implémentation}{7}{section.4}\protected@file@percent }
+\abx@aux@page{13}{7}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Structures de données}{7}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Algorithmes}{7}{subsection.4.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Exemple de structures de données}}{8}{figure.caption.8}\protected@file@percent }
+\newlabel{grid_hierarchy}{{6}{8}{Exemple de structures de données}{figure.caption.8}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Intégration d'un niveau}}{8}{algorithm.1}\protected@file@percent }
+\newlabel{advance_level}{{1}{8}{Intégration d'un niveau}{algorithm.1}{}}
+\abx@aux@page{14}{9}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Raffinement d'un niveau}}{9}{algorithm.2}\protected@file@percent }
+\newlabel{refine_level}{{2}{9}{Raffinement d'un niveau}{algorithm.2}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces Estimateur d'erreur}}{9}{algorithm.3}\protected@file@percent }
+\newlabel{compute_error}{{3}{9}{Estimateur d'erreur}{algorithm.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Application}{9}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Configuration}{9}{subsection.5.1}\protected@file@percent }
+\abx@aux@cite{0}{Löhner86}
+\abx@aux@segm{0}{0}{Löhner86}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Validation}{10}{subsection.5.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Courbe de convergence}}{10}{figure.caption.9}\protected@file@percent }
+\newlabel{convergence}{{7}{10}{Courbe de convergence}{figure.caption.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Analyse}{10}{subsection.5.3}\protected@file@percent }
+\abx@aux@page{15}{10}
+\newlabel{tableau}{{5.3}{11}{Analyse}{subsection.5.3}{}}
+\abx@aux@page{16}{12}
+\abx@aux@page{17}{12}
+\abx@aux@page{18}{12}
+\abx@aux@page{19}{12}
+\abx@aux@page{20}{12}
+\abx@aux@page{21}{12}
+\abx@aux@page{22}{12}
+\abx@aux@page{23}{12}
+\abx@aux@read@bbl@mdfivesum{D4E24ECB1134C5D1D6C4E82549A9C678}
 \abx@aux@defaultrefcontext{0}{Berger_Collela98}{nyt/global//global/global/global}
+\abx@aux@defaultrefcontext{0}{Berger_Oliger84}{nyt/global//global/global/global}
+\abx@aux@defaultrefcontext{0}{Berger_Leveque98}{nyt/global//global/global/global}
+\abx@aux@defaultrefcontext{0}{Hawke18}{nyt/global//global/global/global}
+\abx@aux@defaultrefcontext{0}{Löhner86}{nyt/global//global/global/global}
 \abx@aux@defaultrefcontext{0}{Ruiz12}{nyt/global//global/global/global}
 \abx@aux@defaultrefcontext{0}{Patankar80}{nyt/global//global/global/global}
 \abx@aux@defaultrefcontext{0}{Wang15}{nyt/global//global/global/global}
-\gdef \@abspage@last{7}
+\gdef \@abspage@last{13}

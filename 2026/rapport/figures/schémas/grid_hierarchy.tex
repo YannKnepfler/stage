@@ -1,0 +1,43 @@
+\begin{tikzpicture}
+
+    % lignes horizontales
+    \draw[dashed, thick] (0, 0) -- (12, 0);
+    \draw[dashed, thick] (0, 3) -- (12, 3);
+    \draw[dashed, thick] (0, 6) -- (12, 6);
+    \draw[dashed, thick] (0, 9) -- (12, 9);
+
+    % Maillages
+
+    % cercles
+    \draw[thick] (9, 7.5) circle (30pt);
+    
+    \draw[thick] (7.5, 4.5) circle (30pt);
+    \draw[thick] (10.5, 4.5) circle (30pt);
+
+    \draw[thick] (7.5, 1.5) circle (30pt);
+
+    % Lien entre les maillages
+    
+    \draw[<->, thick] (7.5, 5.57) -- (7.9, 7.05);
+    \draw[<->, thick] (10.5, 5.57) -- (10.1, 7.05);
+    
+    \draw[<->, thick] (7.5, 2.56) -- (7.5, 3.44);
+
+    % Annodtations
+    \node at (9, 7.5) {\large \(G_{1, 1}\)}; 
+    \node at (7.5, 4.5)  {\large \(G_{2, 1}\)}; 
+    \node at (10.5, 4.5) {\large \(G_{2, 2}\)}; 
+    \node at (7.5, 1.5) {\large \(G_{3, 1}\)}; 
+
+
+    % Niveaux
+    \node at (2, 7.5) {\large \(G_1\)};
+    \node at (2, 4.5) {\large \(G_2\)};
+    \node at (2, 1.5) {\large \(G_3\)};
+
+    % liaisons entre les niveaux 
+    \draw[<->, thick] (2, 4.8) -- (2, 7.2);
+    \draw[<->, thick] (2, 1.8) -- (2, 4.2);
+
+
+\end{tikzpicture}

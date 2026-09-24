@@ -9,7 +9,6 @@
 \usepackage{dsfont}
 \usepackage{booktabs}
 \usepackage{siunitx}
-\sisetup{exponent-product = \cdot, output-product = \cdot}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{systeme}
@@ -33,10 +32,13 @@
     colorlinks=true,
     allcolors=blue
 }
+\usepackage{algorithm}
+\usepackage{algorithmic}
 \usepackage[
 backend=biber,
 style=authoryear,
 ]{biblatex}
+\usepackage{csquotes}
 \addbibresource{references.bib}
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows,positioning,calc,decorations.pathreplacing}
@@ -114,14 +116,17 @@ Le modèle utiliser est un modèle à quatre équations d'écoulement diphasique
 
 L'équation de continuité du fluide \(k\), où \(k = 1,2\), est
 \begin{equation}
-     \frac{\partial( \alpha _k \rho _k)}{\partial t}  + \frac{\partial (\alpha _k \rho _k u_k) }{\partial x} = 0
-     \label{continuity}
+    \frac{\partial( \alpha _k \rho _k)}{\partial t}  + \frac{\partial (\alpha _k \rho _k u_k) }{\partial x} = 0
+    \label{continuity}
 \end{equation}
-où \(\alpha_k\) est le fraction volumique du fluide \(k\), \(\rho _k\) est la masse volumique du fluide \(k\) et \(u_k\) la vitesse du fluide \(k\) dans la direction du tuyau.\\
+où \(\alpha_k\) est le fraction volumique du fluide \(k\), \(\rho _k\) est la masse volumique du fluide \(k\) et \(u_k\) la vitesse du fluide \(k\) dans la direction du tuyau.
 
 L'équation de quantité de mouvement du fluide \(k\) est 
 \begin{equation}
-    \frac{\partial (\alpha _k \rho _k u_k)}{\partial t} + \frac{\partial (\alpha _k \rho _k u_k^2)}{\partial x} = - \alpha _k \frac{\partial p _k}{\partial x} - (p_k - p_k^i) \frac{\partial \alpha _k}{\partial x} + \alpha _k \rho _k sin(\theta) + \frac{4 \tau _{k, W}}{D_{H, k}} + \frac{\alpha \tau _i S _i}{A _k}
+    \begin{split}
+        \frac{\partial (\alpha _k \rho _k u_k)}{\partial t} + \frac{\partial (\alpha _k \rho _k u_k^2)}{\partial x} = - \alpha _k \frac{\partial p _k}{\partial x} - (p_k - p_k^i) \frac{\partial \alpha _k}{\partial x} &+ \\
+        \alpha _k \rho _k sin(\theta) + \frac{4 \tau _{k, W}}{D_{H, k}} + \frac{\alpha \tau _i S _i}{A _k}
+    \end{split}
     \label{momentum}
 \end{equation}
 où, \(p_k\) est la pression au sein du fluide \(k\), \(p_k^i\) est la pression a l'interface entre les deux fluides, \(\theta\) la pente du du tuyau, \(\tau _{k, W}\) la contrainte de cisaillement due à la paroi, \(D_{H, k}\) le diamètre hydraulique, \(\tau _i\) la contrainte de cisaillement due à l'interface entre les deux fluides, \(S_i\) le périmètre d'interface et \(A_k\) la surface occupée par le fluide \(k\) dans la section normale.
@@ -132,7 +137,7 @@ Pour fermer ce système d'équation on a,
     \label{closur}
 \end{equation}
 
-Pour assurer la stabilité une différence de pression \(\Delta p \) est introduite, décrit dans \cite{Wang15}.
+Pour assurer la stabilité une différence de pression \(\Delta p \) est introduite (\cite{Wang15}).
 
 \section{Méthode numérique}
 \subsection{Discrétisation}
@@ -164,7 +169,10 @@ Dans le laboratoire plusieurs méthodes numériques sont implémenté, deux mét
 
 Le second membre de l'équation (\ref{befor_discretization}) est discrétisé de la façon suivante, 
 \begin{equation}
-    RHS = - \alpha_{k, e}^n \frac{p_E^{n+1} - p_P^{n+1}}{\Delta x} - \Delta p _{k, e}^n \frac{\alpha_{k, E}^n - \alpha_{k, P}^n}{\Delta x} + (\alpha_k \rho_k)_e^ngsin\theta + \left( \frac{4 \tau_{k, W}}{D_{H, k}} \right)_e^n + \left( \frac{\alpha_k \tau_i S_i}{A_k} \right)_e^n
+    \begin{split}
+        RHS = - \alpha_{k, e}^n \frac{p_E^{n+1} - p_P^{n+1}}{\Delta x} - \Delta p _{k, e}^n \frac{\alpha_{k, E}^n - \alpha_{k, P}^n}{\Delta x} &+ \\
+        (\alpha_k \rho_k)_e^ngsin\theta + \left( \frac{4 \tau_{k, W}}{D_{H, k}} \right)_e^n + \left( \frac{\alpha_k \tau_i S_i}{A_k} \right)_e^n
+    \end{split}
     \label{RHS}
 \end{equation}
 
@@ -179,6 +187,7 @@ La méthode de maillage adaptatif consiste à estimer les zones produisant le pl
 En général, la méthode ne dépend pas du système d'équations à résoudre ni du schéma.
 \subsection{Configuration du maillage }
 \subsubsection{Structure de maillages imbriqués}
+\label{section:3.1.1}
 
 Pour le raffinement de maillage adaptatif on utilise une suite de maillage uniformes imbriqués (\cite{Berger_Collela98}). On note les niveaux de raffinements \( l = 1, ..., l_{max} \), où le niveau \(1\) est le plus grossier, et on définit, 
 \begin{equation}
@@ -201,13 +210,211 @@ Pour assurer la bonne imbrication des maillages entre eux il faut que,
     \item Une maille au niveau \(l\) peut uniquement avoir des mailles voisines au niveau \(l, \; l-1, \; \text{ou} \; l+1\)
 \end{itemize}
 
-\subsubsection{Avancement de la structure de maillages imbriqués}
-Pour pouvoir avancer un maillage d'un pas de temps il faut lui assigner des condition de bord. Pour cela on définit des mailles fantômes aux bords des maillages.
+On définit maillage mère de \( G_{l, k} \) comme le maillage au niveau \(l-1\) dans lequel \( G_{l, k} \) est "contenu", et on dit que \( G_{l, k} \) est un maillage fille de \( G_{l-1, q} \) si \( G_{l-1, q} \) est le maillage mère de \( G_{l, k} \). 
+
+\subsubsection{Définition des conditions de bords}
+Pour pouvoir avancer un maillage d'un pas de temps il faut lui assigner des condition de bord. Pour cela on définit des mailles fantômes aux bords des maillages, décrite dans \cite{Berger_Collela98}. Le choix du nombre de mailles fantômes sur chaque côté du maillage dépend du schéma utilisé.
+Sur la figure \ref{ghost_cells} on met en evidence les mailles fantômes (en pointillé) d'un maillage raffiné \( G_{l, k} \) pour un problème où le domaine de définition est \( [0, 1] \). 
+En notant \(U_{(m, q), i}^n\) le vecteur solution dans la maille \( i\) du maillage \(G_{m, q}\) à l'iteration n, et en prenant la figure \ref{ghost_cells} comme exemple, on définit les mailles fantômes de la façon suivante; 
+
+\begin{itemize}
+    \item À l'interface avec le maillage parent, \( U_{(l, k), -1}^n = U_{(l, k), 0}^n = U_{(l-1, q), I}^n \) 
+    \item À l'interface avec la bordure du domaine les valeurs de \( U_{(l, k), n+1} \; \text{et} \;  U_{(l, k), n+2}\) sont définies à l'aide des conditions de bord. 
+\end{itemize}
 
 \begin{figure}[htbp]
     \centering
-    \input{figures/schémas/ghost_cells.tex}    
+    \input{figures/schémas/ghost_cells.tex}
+    \caption{Maillage avec mailles fantômes pour 2 mailles fantômes de chaque côté}
+    \label{ghost_cells}
 \end{figure}
+
+\subsubsection{Corretions des maillages grossiers}
+Après avoir intégré l'équation sur les maillages filles d'un maillage \( G_{l, k}\) les zones raffinées du maillage mère sont corriger en utilisant les valeurs calculés sur les maillages filles et pour assurer la conservation, on applique une correction de flux aux mailles autour des zones raffinées (\cite{Berger_Leveque98}).
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/schémas/correction_overlapping.tex}
+    \caption{Correction des mailles raffinées}
+    \label{correction_overlapping}
+\end{figure}
+
+En prenant en l'example de la figure \ref{correction_overlapping}, on corrige les mailles raffinées (flèches vertes) de la façon suivante; 
+\[ 
+U_{(l-1, p), I}^{n+1} = \frac{1}{2}(U_{(l, k), 1}^{n+1} + U_{(l, k), 2}^{n+1} ) 
+\] 
+On note les flux d'une maille \(m\) vers une maille \(m+1\) sur un maillage \(G_{l, k}\) calculer à partir de la solution à l'iteration n \( F_{i+1}^n \).
+On corrige alors le flux pour les mailles autour de la zone raffinée (flèches en bleu) de la façon suivante,
+\[
+U_{(l-1, p), I-1 }^{n+1} := U_{(l-1, p), I-1 }^{n+1} - \frac{k}{h_{l-1}} \left( F_{(l, k), 1}^n - F_{(l-1, p), I}^n \right)
+\]
+\[
+U_{(l-1, p), I + 2}^{n+1} := U_{(l-1, p), I + 2}^{n+1} + \frac{k}{h_{l-1}} \left( F_{(l, k), 5}^n - F_{(l-1, p), I+2}^n \right)
+\]
+
+
+\subsection{Raffinement de Maillage}
+Pour raffiner une suite de mailles accollées d'un maillage \(G_{l, k}\) on crée un maillage fille \(G_{l+1, p}\) de cette suite de mailles.
+Pour initialiser le nouveau maillage fille, on prolonge les valeurs du maillage mère de sorte que \[\frac{1}{h_l} \int_{\text{maille mère}} U dV = \frac{1}{h_{l+1}}\sum_{\text{mailles filles}} \int_{\text{maille fille}} UdV\] (\cite{Berger_Oliger84}). Donc en prenant la figure \ref{grid_prolongation} comme exemple, on prolonge de la façon suivante, 
+\begin{align*}
+    U_{(l+1, p), 0}^n = U_{(l, k), I}^n - \frac{1}{4} \text{slope}_I^n\\
+    U_{(l+1, p), 1}^n = U_{(l, k), I}^n + \frac{1}{4} \text{slope}_I^n
+\end{align*}
+
+Où \(\text{slope}_I^n \) est le limiteur de pente, ici le limiteur minmod, telle que, 
+\[
+    slope_I^n = 
+    \begin{cases}
+        0, \text{si } (\Delta U_{(l, k), I}^n) (\Delta U_{(l, k), I+1}) \leq 0 \\
+        \text{sgn}(\Delta U_{(l, k), I}^n) \; \text{min}(|\Delta U_{(l, k), I}^n|, \; |\Delta U_{(l, k), I+1}|), \text{sinon}
+    \end{cases}
+\]
+et \(\Delta U_{(l, k), I}^n = U_{(l, k), I}^n - U_{(l, k), I-1}^n\).
+
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/schémas/grid_prolongation.tex}
+    \caption{Prolongation d'un maillage fille}
+    \label{grid_prolongation}
+\end{figure}
+
+\subsection{Estimateur d'erreur}
+Pour déterminer les zones à raffiner on utilise un estimateur d'erreur.
+Ici on utilise un estimateur d'erreur a posteriori, qui estime l'erreur commise après avoir intégré le problème sur le maillage.
+Ici l'estimateur d'erreur utilisé est l'estimateur de Löhner (\cite{Löhner86}) permettant de localiser les discontinuités, 
+\[
+    E_i = \frac{|U_{i+1} - 2 U_i + U{i-1}|}{|U_{i+1} - U_i| + |U_i - U_{i-1}| + \epsilon (|U_{i+1}| + 2|U_i| + |U_{i-1}|)}
+\]
+où \(\epsilon\) est un paramètre dépendant du problème, permettant de filtrer les perturbations. 
+
+\section{Implémentation}
+Le but était de créer une librairie facilement adaptable pour différents schémas numériques et différents estimateurs d'erreurs. L'implémentation réalisée esr une adaptation du code Fortran90 \cite{Hawke18} en Julia.
+
+\subsection{Structures de données}  
+On définit la structure de maillage qui contient des informations sur la solution, le maillage mère, les maillages filles, la position dans l'espace du maillage et la position au sein du maillage mère du maillage.
+On définit également la structure de niveau qui contient une liste de maillage au même niveau de raffinement, ainsi que le niveau mère et le niveau. 
+Ainsi les structure sont reliés en arborescence, comme décrit dans la figure \ref{grid_hierarchy}.
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/schémas/grid_hierarchy.tex}
+    \caption{Exemple de structures de données}
+    \label{grid_hierarchy}
+\end{figure}
+
+\subsection{Algorithmes}
+
+Pour pouvoir intégrer un maillage il faut que ses mailles fantômes soient bien définies, c'est pourquoi l'intégration des niveaux se fait à partir du niveau le plus gros jusqu'au niveau le plus grossier dans l'algorithm \ref{advance_level}.
+Étant donné que dans (\ref{RHS}), on remarque que la résolution de la pression est implicite, les mailles fantômes doivent être définies à partir des valeurs à l'itération \(n+1\) pour pouvoir intégrer l'équation à l'itération \(n\) sur le maillage. 
+Comme ce même algorithm est récursif un niveau maximum de raffinement est défini pour pouvoir contrôler au mieux le nombre de niveau.
+
+\begin{algorithm}
+    \caption{Intégration d'un niveau}
+    \label{advance_level}
+    \input{figures/algorithmes/advance_level.tex}
+\end{algorithm}
+
+Il est préférable de prendre une zone de raffinement plus large que les tolérances préconisent pour faire en sorte que les zones où le plus d'erreur est commis reste dans les zones raffinées une fois intégré l'équation (\cite{Löhner86}).
+C'est pourquoi on introduit le paramètre \texttt{buffer\_width} dans l'algorithme \ref{refine_level}.
+Dans ce même algorithme deux tolérances sont introduites puisque une tolérance plus faible pour les mailles déjà raffinée est utile pour des schémas présentants de la diffusion numérique.
+En effet, la diffusion numérique lisse les solutions et ainsi plus l'équation est intégré plus l'estimation d'erreur calculée est faible.
+
+\begin{algorithm}
+    \caption{Raffinement d'un niveau}
+    \label{refine_level}
+    \input{figures/algorithmes/refine_level.tex}
+\end{algorithm}
+
+Pour empêcher la destruction d'un maillage fille qui possède lui même des maillages filles, dans l'algorithme \ref{compute_error} on force le raffinement dans ce cas en donnant une estimation d'erreur virtuel haute.
+Grâce à cela et les zones de raffinement plus large, la bonne imbriquation défini dans la section \ref{section:3.1.1} est assurée.
+
+\begin{algorithm}
+    \caption{Estimateur d'erreur}
+    \label{compute_error}
+    \input{figures/algorithmes/compute_error.tex}
+\end{algorithm}
+
+\section{Application}
+\subsection{Configuration}
+
+La méthode implémentée est testée sur l'équation d'advection en 1 dimension pour plusieurs conditions initiales,
+
+\begin{equation}
+    \begin{cases}
+            \frac{\partial u}{\partial t} + \frac{\partial u}{\partial x} = 0, \quad \text{où } x \in [0, 1] \\
+            u(0, x) = u_0(x) \\
+            u(t, 0) = u_0(-t)\\
+            u(t, 1) = u_0(1-t)
+    \end{cases}
+\end{equation}
+
+Les conditons initiales sont, 
+\begin{itemize}
+    \item La gaussienne, \(u_0(x) = 0.9exp(-(\frac{x - x_c}{\sigma})^2) + 0.1\) où \(x_c  = 0.25\) et \(\sigma = 0.05\)
+    \item Le créneau, \( u_0(x) = \begin{cases} 1, \text{si } x < 0.2 \\ 0, \text{sinon} \end{cases} \)
+    \item Le signal rectangle, \( u_0(x) = \begin{cases} 1, \text{si } 0.1 < x < 0.2 \\ 0, \text{sinon} \end{cases} \)
+\end{itemize}
+
+L'équation est intégrée grâce au schéma upwind du premier ordre.
+
+\subsection{Validation}
+La méthode est testé en mesurant l'ordre de convergence pour un nombre maximum de niveau allant de 1 à 4. 
+Le jeu de paramètre pour ce test est le suivant, 
+\begin{itemize}
+    \item \texttt{ref\_tol}: 0.00009375
+    \item \texttt{coars\_tol}: 0.00003125
+    \item \texttt{buffer\_width}: 4
+    \item \(\epsilon\) : 0.01
+    \item coefficient cfl: 0.5
+\end{itemize}
+
+L'ordre de convergence est mesuré uniquement sur la première condition initiale, étant donné quelle est la seule continue.
+Étant donné que pour les quatres nombres maximum de niveau de raffinement l'ordre de convergence est proche de 1 sur la figure (\ref{convergence}), on peut considérer que la méthode est valide.
+Sur cette figure, l'axe des abscisses représente la taille des mailles du maillage le plus grossier.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/validation.png}
+    \caption{Courbe de convergence}
+    \label{convergence}
+\end{figure}
+
+\subsection{Analyse}
+La méthode est également testé sur les trois conditions initiales en mesurant l'erreur globale pour différent nombres maximum de niveaux de raffinement, \(l_{max}\).
+Ici le nombre de mailles du maillage le plus grossier est fixé à 64, et le jeu de paramètre est (\cite{Löhner86}),
+
+\begin{itemize}
+    \item \texttt{ref\_tol}: 0.3
+    \item \texttt{coars\_tol}: 0.1
+    \item \texttt{buffer\_width}: 4
+    \item \(\epsilon\) : 0.01
+    \item coefficient cfl: 0.5
+\end{itemize} 
+
+Sur le tableau \ref{tableau}, 
+
+\begin{center}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \(l_{max}\) / condition initiale & Gaussienne & Créneau & Signal rectangle \\
+        \hline
+        1 & 0,08012983661 & 0,09126679464 & 0,135470096 \\
+        2 & 0,06978615294 & 0,07682885266 & 0,110086436 \\
+        3 & 0,05254172054 & 0,0708716789 & 0,1009166435 \\
+        4 & 0,05254172054 & 0,06958670085 & 0,09985460564 \\
+        
+        \hline        
+    \end{tabular}
+    \label{tableau}
+\end{center}
+
+
+
+
+
+
+
+
 
 \newpage
 \printbibliography

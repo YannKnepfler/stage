@@ -80,16 +80,21 @@ function regrid_level!(level::Level)
         # Definition of the local variables 
         new_child_list::Vector{Grid} = Vector{Grid}(undef, 0)
         
+        # Update the local error 
+        compute_local_error!(level)
+
         # Definition of the new child list 
         for grid in level.grid_list
 
-            # Update the local error 
-            compute_local_error!(level)
+
+            
 
             # Find the new children
             append!(new_child_list, regrid_one_grid!(grid))
 
         end
+
+
 
         # Set a new child level if needed 
         if isnothing(level.child) && !isempty(new_child_list)

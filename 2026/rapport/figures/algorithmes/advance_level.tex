@@ -1,0 +1,10 @@
+\begin{algorithmic}
+    \STATE \textbf{Données:} niveau \(G_l\)
+    \STATE Intégrer la solution sur les maillages de \(G_l\)
+    \IF {\(l < l_{max}\)}
+    \STATE Mettre à jour les mailles fantômes des maillages filles des maillages de \(G_l\)
+    \STATE Appliquer cette algorithme au niveau \(G_{l+1}\)
+    \STATE Corriger les mailles raffiner et les flux au bords des zones raffinées
+    \STATE Applique l'algorithme de raffinement au niveau \(G_l\)
+    \ENDIF
+\end{algorithmic}

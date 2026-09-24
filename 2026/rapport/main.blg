@@ -1,17 +1,17 @@
-[0] Config.pm:328> INFO - This is Biber 2.21
-[0] Config.pm:331> INFO - Logfile is 'main.blg'
-[139] biber-MSWIN64:342> INFO - === 
-[193] Biber.pm:421> INFO - Reading 'main.bcf'
-[344] Biber.pm:1002> INFO - Found 4 citekeys in bib section 0
-[362] Biber.pm:4487> INFO - Processing section 0
-[376] Biber.pm:4678> INFO - Looking for bibtex file 'references.bib' for section 0
-[456] bibtex.pm:1713> INFO - LaTeX decoding ...
-[495] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
-[561] UCollate.pm:68> INFO - Overriding locale 'fr-FR' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[561] UCollate.pm:68> INFO - Overriding locale 'fr-FR' defaults 'variable = shifted' with 'variable = non-ignorable'
-[562] Biber.pm:4307> INFO - Sorting list 'nyt/global//global/global/global' of type 'entry' with template 'nyt' and locale 'fr-FR'
-[562] Biber.pm:4313> INFO - No sort tailoring available for locale 'fr-FR'
-[567] bbl.pm:676> INFO - Writing 'main.bbl' with encoding 'UTF-8'
-[570] bbl.pm:779> INFO - Output to main.bbl
-[571] Biber.pm:132> WARN - BibTeX subsystem: C:\Users\User\AppData\Local\Temp\biber_tmp_MVyk\33e59b5ca9ec342068223d604c3f8d55_12508.utf8, line 4, warning: 41 characters of junk seen at toplevel
-[571] Biber.pm:134> INFO - WARNINGS: 1
+[1] Config.pm:329> INFO - This is Biber 2.22
+[2] Config.pm:332> INFO - Logfile is 'main.blg'
+[964] biber-MSWIN64:342> INFO - === 
+[1244] Biber.pm:421> INFO - Reading 'main.bcf'
+[2662] Biber.pm:1002> INFO - Found 8 citekeys in bib section 0
+[2785] Biber.pm:4487> INFO - Processing section 0
+[2882] Biber.pm:4680> INFO - Looking for bibtex file 'references.bib' for section 0
+[3168] bibtex.pm:1713> INFO - LaTeX decoding ...
+[3287] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
+[3946] UCollate.pm:68> INFO - Overriding locale 'fr-FR' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[3946] UCollate.pm:68> INFO - Overriding locale 'fr-FR' defaults 'variable = shifted' with 'variable = non-ignorable'
+[3947] Biber.pm:4307> INFO - Sorting list 'nyt/global//global/global/global' of type 'entry' with template 'nyt' and locale 'fr-FR'
+[3947] Biber.pm:4313> INFO - No sort tailoring available for locale 'fr-FR'
+[4040] bbl.pm:676> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[4075] bbl.pm:779> INFO - Output to main.bbl
+[4083] Biber.pm:132> WARN - BibTeX subsystem: C:\Users\yannk\AppData\Local\Temp\biber_tmp_TmLw\33e59b5ca9ec342068223d604c3f8d55_2284.utf8, line 4, warning: 41 characters of junk seen at toplevel
+[4084] Biber.pm:134> INFO - WARNINGS: 1
